@@ -1,4 +1,6 @@
 ﻿// DONE
+using Microsoft.EntityFrameworkCore;
+
 public class PaymentService : IPaymentService
 {
     private readonly OnlineMarketDB _context;
@@ -11,22 +13,23 @@ public class PaymentService : IPaymentService
     public async Task<List<Payment>> GetAllPaymentsAsync()
     {
         return await _context.Payments.ToListAsync();
-    }
+    } // done
 
     public async Task<Payment> GetPaymentByIdAsync(int id)
     {
         return await _context.Payments.FindAsync(id);
-    }
+    } // done
 
-    public async Task<Payment> CreatePaymentAsync(Payment payment)
+    public async Task<Payment> CreatePaymentAsync(int OrderId, Payment payment)
     {
-        var existingOrder = await _context.Orders.FindAsync(payment.OrderId);
+        var existingOrder = await _context.Orders.FirstOrDefaultAsync(x => x.OrderId == OrderId);
 
         if (existingOrder == null)
         {
             throw new Exception("Order not found.");
         }
         payment.PaymentDate = DateTime.Now;
+        existingOrder.PaymentId=payment.PaymentId;
 
         await _context.Payments.AddAsync(payment);
         await _context.SaveChangesAsync();

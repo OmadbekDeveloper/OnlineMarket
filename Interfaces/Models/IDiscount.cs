@@ -4,7 +4,7 @@
     {
         Task<List<Discount>> GetAllDiscountsAsync();
         Task<Discount> GetDiscountByIdAsync(int id);
-        Task<Discount> CreateDiscountAsync(Discount discount);
+        Task CreateDiscountAsync(CreateDiscountDto discountdto);
         Task<bool> UpdateDiscountAsync(int id, Discount updatedDiscount);
         Task<bool> DeleteDiscountAsync(int id);
     }

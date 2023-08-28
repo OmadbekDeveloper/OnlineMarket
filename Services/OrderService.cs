@@ -1,4 +1,4 @@
-﻿// DONE
+﻿
 public class OrderService : IOrderService
 {
     private readonly OnlineMarketDB _context;
@@ -11,12 +11,12 @@ public class OrderService : IOrderService
     public async Task<List<Order>> GetAllOrdersAsync()
     {
         return await _context.Orders.ToListAsync();
-    }
+    } // done
 
     public async Task<Order> GetOrderByIdAsync(int id)
     {
         return await _context.Orders.FindAsync(id);
-    }
+    } // done
 
     public async Task<Order> CreateOrderAsync(Order order)
     {
@@ -47,10 +47,6 @@ public class OrderService : IOrderService
 
     public async Task<bool> UpdateOrderAsync(int id, Order updatedOrder)
     {
-        //var existingOrder = await _context.Orders
-        //    .Include(o => o.OrderItems)
-        //    .FirstOrDefaultAsync(o => o.OrderId == updatedOrder.OrderId);
-
         var existingOrder = await _context.Orders.FindAsync(id);
 
         if (existingOrder == null)

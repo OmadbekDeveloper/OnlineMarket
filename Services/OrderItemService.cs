@@ -1,5 +1,4 @@
-﻿// DONE
-public class OrderItemService : IOrderItemService
+﻿public class OrderItemService : IOrderItemService
 {
     private readonly OnlineMarketDB _context;
 
@@ -11,29 +10,26 @@ public class OrderItemService : IOrderItemService
     public async Task<List<OrderItem>> GetOrderItemsByOrderIdAsync()
     {
         return await _context.OrderItems.ToListAsync();
-    }
+    } // done
 
     public async Task<OrderItem> GetOrderItemByIdAsync(int id)
     {
         return await _context.OrderItems.FindAsync(id);
-    }
+    } // done
 
-    public async Task<OrderItem> AddOrderItemAsync(OrderItem orderItem)
+    public async Task AddOrderItemAsync(CreateOrderItemDto orderItemdto)
     {
-        var existingOrder = await _context.Orders.FindAsync(orderItem.OrderId);
-        var existingProduct = await _context.Products.FindAsync(orderItem.ProductId);
-
-        if (existingOrder == null || existingProduct == null)
+        var orderitemrcreate = new OrderItem()
         {
-            throw new Exception("Order or product not found.");
-        }
+            OrderItemId = orderItemdto.OrderId,
+            OrderId = orderItemdto.OrderId,
+            ProductId = orderItemdto.ProductId,
+            Quantity = orderItemdto.Quantity,
+            Subtotal = orderItemdto.Subtotal,
+        };
 
-        orderItem.Subtotal = existingProduct.Price * orderItem.Quantity;
-
-        await _context.OrderItems.AddAsync(orderItem);
+        await _context.OrderItems.AddAsync(orderitemrcreate);
         await _context.SaveChangesAsync();
-
-        return orderItem;
     }
 
     public async Task<bool> UpdateOrderItemAsync(int id, OrderItem updatedOrderItem)

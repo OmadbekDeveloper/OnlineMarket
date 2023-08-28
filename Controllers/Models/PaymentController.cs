@@ -1,4 +1,6 @@
-﻿namespace OnlineMarket.Controllers.Models
+﻿using OnlineMarket.Models.Models;
+
+namespace OnlineMarket.Controllers.Models
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -15,19 +17,21 @@
         public async Task<IActionResult> GetPayments()
         {
             var payments = await _context.Payments.ToListAsync();
+            if (payments != null)
+                return NotFound();
+
             return Ok(payments);
-        }
+        } // done
 
         [HttpGet("{GetPayment}")]
         public async Task<IActionResult> GetPayment(int id)
         {
             var payment = await _context.Payments.FindAsync(id);
-            if (payment == null)
+            if (payment != null)
                 return NotFound();
 
             return Ok(payment);
-        }
+        } // done
 
-        // Implement POST, PUT, and DELETE methods similarly
     }
 }

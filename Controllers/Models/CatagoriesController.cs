@@ -1,4 +1,8 @@
 ﻿// DONE
+using OnlineMarket.Interfaces.Models;
+using OnlineMarket.Models.Dtos;
+using OnlineMarket.Models.Models;
+
 namespace OnlineMarket.Controllers.Models
 {
     [Route("api/[controller]")]
@@ -12,34 +16,37 @@ namespace OnlineMarket.Controllers.Models
             this.categoryService = categoryService;
         }
 
-        [HttpGet("{GetAllCategories}")]
+        [HttpGet("GetAllCategories")]
         public async Task<IActionResult> GetAllCategories()
         {
-            var getcategories = categoryService.GetAllCategoriesAsync();
-            return Ok(getcategories);
-        }
+            var customers = await categoryService.GetAllCategoriesAsync();
+            if (customers != null)
+                return NotFound();
 
-        [HttpGet("{GetCategoryById}")]
+            return Ok(customers);
+        } // done
+
+        [HttpGet("GetCategoryById")]
         public async Task<IActionResult> GetCategoryById(int id)
         {
-            var getcategory = categoryService.GetCategoryByIdAsync(id);
-            if (getcategory == null)
+            var getcategory = await categoryService.GetCategoryByIdAsync(id);
+            if (getcategory != null)
                 return NotFound();
 
             return Ok(getcategory);
-        }
+        } // done
 
-        [HttpPost("{CreateCategory}")]
-        public async Task<IActionResult> CreateCategory(Category category)
+        [HttpPost("CreateCategory")]
+        public async Task<IActionResult> CreateCategory(CreateCategoryDto categorydto)
         {
-            var createcategory = categoryService.CreateCategoryAsync(category);
-            if (createcategory == null)
+            await categoryService.CreateCategoryAsync(categorydto);
+            if(categorydto == null)
                 return NotFound();
 
-            return Ok(createcategory);
-        }
+            return Ok("Created");
+        } // done
 
-        [HttpPut("{UpdateCategory}")]
+        [HttpPut("UpdateCategory")]
         public async Task<IActionResult> UpdateCategory(int id, Category updatedCategory)
         {
             var updatecategory = categoryService.UpdateCategoryAsync(id, updatedCategory);
@@ -49,7 +56,7 @@ namespace OnlineMarket.Controllers.Models
             return Ok(updatecategory);
         }
 
-        [HttpDelete("{DeleteCategory}")]
+        [HttpDelete("DeleteCategory")]
         public async Task<IActionResult> DeleteCategory(int id)
         {
             var deletecategory = categoryService.DeleteCategoryAsync(id);

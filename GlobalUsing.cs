@@ -12,7 +12,6 @@ global using OnlineMarket.Data;
 global using OnlineMarket.Enums;
 global using OnlineMarket.Interfaces.Models;
 global using OnlineMarket.Interfaces.Person;
-global using OnlineMarket.Middleware;
 global using OnlineMarket.Models.Authentication;
 global using OnlineMarket.Models.Dtos;
 global using OnlineMarket.Models.Models;

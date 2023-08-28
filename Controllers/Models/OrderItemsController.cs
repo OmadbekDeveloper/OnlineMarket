@@ -1,62 +1,45 @@
-﻿namespace OnlineMarket.Controllers.Models
+﻿using OnlineMarket.Models.Models;
+
+namespace OnlineMarket.Controllers.Models
 {
     [Route("api/[controller]")]
     [ApiController]
     public class OrderItemsController : ControllerBase
     {
-        private readonly OnlineMarketDB _context;
+        private readonly IOrderItemService orderItemService;
 
-        public OrderItemsController(OnlineMarketDB context)
+        public OrderItemsController(IOrderItemService orderItemService)
         {
-            _context = context;
+            this.orderItemService = orderItemService;
         }
 
-        [HttpGet("{GetOrderItems}")]
+        [HttpGet("GetOrderItems")]
         public async Task<IActionResult> GetOrderItems()
         {
-            var orderItems = await _context.OrderItems.ToListAsync();
-            return Ok(orderItems);
-        }
+            var orderItems = await orderItemService.GetOrderItemsByOrderIdAsync();
+            if (orderItems == null)
+                return NotFound();
 
-        [HttpGet("{GetOrderItem}")]
+            return Ok(orderItems);
+        } // done?
+
+        [HttpGet("GetOrderItem")]
         public async Task<IActionResult> GetOrderItem(int id)
         {
-            var orderItem = await _context.OrderItems.FindAsync(id);
+            var orderItem = await orderItemService.GetOrderItemByIdAsync(id);
             if (orderItem == null)
                 return NotFound();
 
             return Ok(orderItem);
-        }
+        } // done?
 
-        [HttpPost("{CreateOrderItem}")]
-        public async Task<IActionResult> CreateOrderItem(OrderItem orderItem)
+        [HttpPost("CreateOrderItem")]
+        public async Task<IActionResult> CreateOrderItem(CreateOrderItemDto orderItemdto)
         {
-            _context.OrderItems.Add(orderItem);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetOrderItem), new { id = orderItem.OrderItemId }, orderItem);
-        }
+            await orderItemService.AddOrderItemAsync(orderItemdto);
 
-        [HttpPut("{UpdateOrderItem}")]
-        public async Task<IActionResult> UpdateOrderItem(int id, OrderItem updatedOrderItem)
-        {
-            if (id != updatedOrderItem.OrderItemId)
-                return BadRequest();
+            return Ok("Created");
+        } // done?
 
-            _context.Entry(updatedOrderItem).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-            return NoContent();
-        }
-
-        [HttpDelete("{DeleteOrderItem}")]
-        public async Task<IActionResult> DeleteOrderItem(int id)
-        {
-            var orderItem = await _context.OrderItems.FindAsync(id);
-            if (orderItem == null)
-                return NotFound();
-
-            _context.OrderItems.Remove(orderItem);
-            await _context.SaveChangesAsync();
-            return NoContent();
-        }
     }
 }

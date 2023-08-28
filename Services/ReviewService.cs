@@ -9,17 +9,15 @@ public class ReviewService : IReviewService
         _context = context;
     }
 
-    public async Task<List<Review>> GetReviewsByProductIdAsync(int productId)
+    public async Task<List<Review>> GetReviewsByProductIdAsync()
     {
-        return await _context.Reviews
-            .Where(r => r.ProductId == productId)
-            .ToListAsync();
-    }
+        return await _context.Reviews.ToListAsync();
+    } // done
 
     public async Task<Review> GetReviewByIdAsync(int id)
     {
         return await _context.Reviews.FindAsync(id);
-    }
+    } // done
 
     public async Task<Review> AddReviewAsync(Review review)
     {

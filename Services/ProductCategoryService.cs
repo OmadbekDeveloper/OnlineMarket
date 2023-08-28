@@ -1,4 +1,4 @@
-﻿// DONE
+﻿
 public class ProductCategoryService : IProductCategoryService
 {
     private readonly OnlineMarketDB _context;
@@ -10,21 +10,8 @@ public class ProductCategoryService : IProductCategoryService
 
     public async Task<List<ProductCategory>> GetProductCategoriesByProductIdAsync(int productId)
     {
-        return await _context.ProductCategories
-            .Where(pc => pc.ProductId == productId)
-            .ToListAsync();
-    }
-
-    //public async Task<List<ProductCategory>> GetProductCategoriesByProductIdAsync(int productId)
-    //{
-    //    //var productCategories = await _context.ProductCategories
-    //    //    .Where(pc => pc.ProductId == productId)
-    //    //    .Select(pc => pc.Category)
-    //    //    .ToListAsync();
-
-    //    //return productCategories;
-
-    //}
+        return await _context.ProductCategories.ToListAsync();
+    } // done
 
     public async Task<ProductCategory> AddProductCategoryAsync(int productId, int categoryId)
     {

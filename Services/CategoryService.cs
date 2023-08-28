@@ -1,5 +1,4 @@
-﻿// DONE
-
+﻿
 public class CategoryService : ICategoryService
 {
     private readonly OnlineMarketDB _context;
@@ -12,27 +11,24 @@ public class CategoryService : ICategoryService
     public async Task<List<Category>> GetAllCategoriesAsync()
     {
         return await _context.Categories.ToListAsync();
-    }
+    } // done
 
     public async Task<Category> GetCategoryByIdAsync(int id)
     {
         return await _context.Categories.FindAsync(id);
-    }
+    } // done
 
-    public async Task<Category> CreateCategoryAsync(Category category)
+    public async Task CreateCategoryAsync(CreateCategoryDto categorydto)
     {
-        var category1 = await _context.Categories.FirstOrDefaultAsync(cat => cat.Name == category.Name);
-
-        if (category != null)
+        var categorycreate = new Category()
         {
-            throw new Exception("Category with the same name already exists.");
-        }
+            CategoryId = categorydto.CategoryId,
+            Name = categorydto.Name,
+        };
 
-        await _context.Categories.AddAsync(category);
+        await _context.Categories.AddAsync(categorycreate);
         await _context.SaveChangesAsync();
-
-        return category;
-    }
+    } // done
 
     public async Task<bool> UpdateCategoryAsync(int id, Category updatedCategory)
     {

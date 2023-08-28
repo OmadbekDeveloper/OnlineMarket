@@ -2,7 +2,7 @@
 {
     public interface IReviewService
     {
-        Task<List<Review>> GetReviewsByProductIdAsync(int productId);
+        Task<List<Review>> GetReviewsByProductIdAsync();
         Task<Review> GetReviewByIdAsync(int id);
         Task<Review> AddReviewAsync(Review review);
         Task<bool> UpdateReviewAsync(int id, Review updatedReview);

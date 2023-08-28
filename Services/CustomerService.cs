@@ -14,27 +14,12 @@ public class CustomerService : ICustomerService
     public async Task<List<Customer>> GetAllCustomersAsync()
     {
         return await _context.Customers.ToListAsync();
-    }
+    } // done
 
     public async Task<Customer> GetCustomerByIdAsync(int id)
     {
         return await _context.Customers.FindAsync(id);
-    }
-
-    //public async Task<Customer> CreateCustomerAsync(Customer createcustomer)
-    //{
-    //    var customer = await _context.Customers.FirstOrDefaultAsync(c => c.Email == createcustomer.Email);
-
-    //    if (customer != null)
-    //    {
-    //        throw new Exception("Customer with the same email already exists.");
-    //    }
-
-    //    await _context.Customers.AddAsync(customer);
-    //    await _context.SaveChangesAsync();
-
-    //    return customer;
-    //}
+    } // done
 
     public async Task CreateCustomerAsync(CreateCustomerDto customerdto)
     {
@@ -50,7 +35,7 @@ public class CustomerService : ICustomerService
 
         await _context.Customers.AddAsync(customercreate);
         await _context.SaveChangesAsync();
-    }
+    } // done
 
     public async Task<bool> UpdateCustomerAsync(int id, Customer updatedCustomer)
     {

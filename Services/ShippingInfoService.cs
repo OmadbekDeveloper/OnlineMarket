@@ -8,23 +8,26 @@ public class ShippingInfoService : IShippingInfoService
     {
         _context = context;
     }
+    public async Task<List<ShippingInfo>> GetShippingInfoByOrderAsync()
+    {
+        return await _context.ShippingInfos.ToListAsync();
+    } // done
 
     public async Task<ShippingInfo> GetShippingInfoByOrderIdAsync(int orderId)
     {
-        return await _context.ShippingInfo
-            .FirstOrDefaultAsync(si => si.OrderId == orderId);
-    }
+        return await _context.ShippingInfos.FindAsync(orderId);
+    } // done
 
     public async Task<ShippingInfo> CreateShippingInfoAsync(ShippingInfo shippingInfo)
     {
-        _context.ShippingInfo.Add(shippingInfo);
+        await _context.ShippingInfos.AddAsync(shippingInfo);
         await _context.SaveChangesAsync();
         return shippingInfo;
     }
 
     public async Task<bool> UpdateShippingInfoAsync(int orderId, ShippingInfo updatedShippingInfo)
     {
-        var shippingInfo = await _context.ShippingInfo
+        var shippingInfo = await _context.ShippingInfos
             .FirstOrDefaultAsync(si => si.OrderId == orderId);
 
         if (shippingInfo == null)

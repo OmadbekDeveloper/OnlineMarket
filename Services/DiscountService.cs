@@ -1,7 +1,4 @@
-﻿// DONE
-
-using Microsoft.EntityFrameworkCore;
-
+﻿
 public class DiscountService : IDiscountService
 {
     private readonly OnlineMarketDB _context;
@@ -14,27 +11,27 @@ public class DiscountService : IDiscountService
     public async Task<List<Discount>> GetAllDiscountsAsync()
     {
         return await _context.Discounts.ToListAsync();
-    }
+    } // done
 
     public async Task<Discount> GetDiscountByIdAsync(int id)
     {
         return await _context.Discounts.FindAsync(id);
-    }
+    } // done
 
-    public async Task<Discount> CreateDiscountAsync(Discount discount)
+    public async Task CreateDiscountAsync(CreateDiscountDto discountdto)
     {
-        var existingDiscount = await _context.Discounts.FirstOrDefaultAsync(d => d.Code == discount.Code);
-
-        if (existingDiscount != null)
+        var discountcreate = new Discount()
         {
-            throw new Exception("Discount with the same code already exists.");
-        }
+            DiscountId = discountdto.DiscountId,
+            Code = discountdto.Code,
+            Type = discountdto.Type,
+            Value = discountdto.Value,
+            ExpiryDate = discountdto.ExpiryDate,
+        };
 
-        _context.Discounts.Add(discount);
+        await _context.Discounts.AddAsync(discountcreate);
         await _context.SaveChangesAsync();
-
-        return discount;
-    }
+    } // done
 
     public async Task<bool> UpdateDiscountAsync(int id, Discount updatedDiscount)
     {

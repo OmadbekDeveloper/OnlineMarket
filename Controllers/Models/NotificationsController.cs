@@ -1,31 +1,45 @@
-﻿namespace OnlineMarket.Controllers.Models
+﻿using Microsoft.AspNetCore.Mvc;
+using OnlineMarket.Models.Models;
+
+namespace OnlineMarket.Controllers.Models
 {
     [Route("api/[controller]")]
     [ApiController]
     public class NotificationsController : ControllerBase
     {
-        private readonly OnlineMarketDB _context;
+        private readonly INotificationService notificationService;
 
-        public NotificationsController(OnlineMarketDB context)
+        public NotificationsController(INotificationService notificationService)
         {
-            _context = context;
+            this.notificationService = notificationService;
         }
 
-        [HttpGet("{GetNotifications}")]
+        [HttpGet("GetNotifications")]
         public async Task<IActionResult> GetNotifications()
         {
-            var notifications = await _context.Notifications.ToListAsync();
-            return Ok(notifications);
-        }
+            var notifications = await notificationService.GetAllNotificationsAsync();
+            if (notifications == null)
+                return NotFound();
 
-        [HttpGet("{GetNotification}")]
+            return Ok(notifications);
+        } // done
+
+        [HttpGet("GetNotification")]
         public async Task<IActionResult> GetNotification(int id)
         {
-            var notification = await _context.Notifications.FindAsync(id);
+            var notification = await notificationService.GetNotificationByIdAsync(id);
             if (notification == null)
                 return NotFound();
 
             return Ok(notification);
-        }
+        } // done
+
+        [HttpPost("CreateNotification")]
+        public async Task<IActionResult> CreateNotification(CreateNotificationDto notificationdto)
+        {
+            await notificationService.CreateNotificationAsync(notificationdto);
+
+            return Ok("Created");
+        } // done
     }
 }

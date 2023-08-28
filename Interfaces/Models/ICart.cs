@@ -5,7 +5,7 @@ namespace OnlineMarket.Interfaces.Models
     {
         Task<List<Cart>> GetAllCartsAsync();
         Task<Cart> GetCartByIdAsync(int id);
-        Task<Cart> CreateCartAsync(int cartid);
+        Task CreateCartAsync(CreateCartDto cartdto);
         Task<bool> UpdateCartAsync(int id, Cart updatedCart);
         Task<bool> DeleteCartAsync(int id);
         Task<decimal> CalculateCartTotalAsync(int id);

@@ -1,6 +1,4 @@
 ﻿
-using Microsoft.EntityFrameworkCore;
-
 public class ProductService : IProductService
 {
     private readonly OnlineMarketDB _context;
@@ -13,32 +11,27 @@ public class ProductService : IProductService
     public async Task<List<Product>> GetProductsAsync()
     {
         return await _context.Products.ToListAsync();
-    }
+    } // done
 
     public async Task<Product> GetProductByIdAsync(int id)
     {
         return await _context.Products.FindAsync(id);
-    }
+    } // done
 
-    //public async Task<Product> CreateProductAsync(Product product)
-    //{
-    //    _context.Products.Add(product);
-    //    await _context.SaveChangesAsync();
-    //    return product;
-    //}
-
-    public async Task<Product> CreateProductAsync(Product product)
+    public async Task CreateProductAsync(CreateProductDto productdto)
     {
-        if (product == null)
+        var productcreate = new Product()
         {
-            throw new ArgumentNullException(nameof(product));
-        }
+            ProductId = productdto.ProductId,
+            Name = productdto.Name,
+            Description = productdto.Description,
+            Price = productdto.Price,
+            StockQuantity = productdto.StockQuantity,
+        };
 
-        _context.Products.Add(product);
+        await _context.Products.AddAsync(productcreate);
         await _context.SaveChangesAsync();
-
-        return product;
-    }
+    } // done
 
     public async Task<Product> UpdateProductAsync(int id, Product updatedProduct)
     {

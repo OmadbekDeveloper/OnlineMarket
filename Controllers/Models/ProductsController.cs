@@ -1,62 +1,67 @@
-﻿namespace OnlineMarket.Controllers.Models
+﻿using Microsoft.AspNetCore.Cors.Infrastructure;
+using OnlineMarket.Interfaces.Models;
+using OnlineMarket.Models.Dtos;
+using OnlineMarket.Models.Models;
+
+namespace OnlineMarket.Controllers.Models
 {
     [Route("api/[controller]")]
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private readonly OnlineMarketDB _context;
+        private readonly IProductService productService;
 
-        public ProductsController(OnlineMarketDB context)
+        public ProductsController(IProductService productService)
         {
-            _context = context;
+            this.productService = productService;
         }
 
-        [HttpGet("{GetProducts}")]
+        [HttpGet("GetProducts")]
         public async Task<IActionResult> GetProducts()
         {
-            var products = await _context.Products.ToListAsync();
-            return Ok(products);
-        }
+            var getproducts = productService.GetProductsAsync();
+            if (getproducts != null)
+                return NotFound();
 
-        [HttpGet("{GetProduct}")]
+            return Ok(getproducts);
+        } // done
+
+        [HttpGet("GetProduct")]
         public async Task<IActionResult> GetProduct(int id)
         {
-            var product = await _context.Products.FindAsync(id);
-            if (product == null)
+            var getproduct = productService.GetProductByIdAsync(id);
+            if (getproduct != null)
                 return NotFound();
 
-            return Ok(product);
-        }
+            return Ok(getproduct);
+        } // done
 
-        [HttpPost("{CreateProduct}")]
-        public async Task<IActionResult> CreateProduct(Product product)
+        [HttpPost("CreateProduct")]
+        public async Task<IActionResult> CreateProduct(CreateProductDto productdto)
         {
-            _context.Products.Add(product);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetProduct), new { id = product.ProductId }, product);
-        }
+            await productService.CreateProductAsync (productdto);
 
-        [HttpPut("{UpdateProduct}")]
+            return Ok("Created");
+        } // done
+
+        [HttpPut("UpdateProduct")]
         public async Task<IActionResult> UpdateProduct(int id, Product updatedProduct)
         {
-            if (id != updatedProduct.ProductId)
-                return BadRequest();
-
-            _context.Entry(updatedProduct).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-            return NoContent();
-        }
-
-        [HttpDelete("{DeleteProduct}")]
-        public async Task<IActionResult> DeleteProduct(int id)
-        {
-            var product = await _context.Products.FindAsync(id);
-            if (product == null)
+            var updateproduct = productService.UpdateProductAsync(id, updatedProduct);
+            if (updatedProduct == null)
                 return NotFound();
 
-            _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
-            return NoContent();
+            return Ok(updatedProduct);
+        }
+
+        [HttpDelete("DeleteProduct")]
+        public async Task<IActionResult> DeleteProduct(int id)
+        {
+            var deleteproduct = productService.DeleteProductAsync(id);
+            if (deleteproduct == null)
+                return NotFound();
+
+            return Ok(deleteproduct);
         }
     }
 }

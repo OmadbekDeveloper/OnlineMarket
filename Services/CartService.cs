@@ -1,6 +1,4 @@
-﻿// DONE
-
-
+﻿
 public class CartService : ICartService
 {
     private readonly OnlineMarketDB _context;
@@ -12,38 +10,25 @@ public class CartService : ICartService
 
     public async Task<List<Cart>> GetAllCartsAsync()
     {
-        return await _context.Carts
-            .Include(c => c.CartItems)
-            .ToListAsync();
-    }
+        return await _context.Carts.ToListAsync();
+    } // done
 
     public async Task<Cart> GetCartByIdAsync(int id)
     {
-        return await _context.Carts
-            .Include(c => c.CartItems)
-            .FirstOrDefaultAsync(c => c.CartId == id);
-    }
+        return await _context.Carts.FindAsync(id);
+    } // done
 
-    public async Task<Cart> CreateCartAsync(int cartid)
+    public async Task CreateCartAsync(CreateCartDto cartdto)
     {
-        var existingCart = await _context.Carts.FirstOrDefaultAsync(cart => cart.CustomerId == cartid);
-
-        if (existingCart != null)
+        var cartcreate = new Cart()
         {
-            throw new Exception("User already has a cart.");
-        }
-
-        var newCart = new Cart
-        {
-            CustomerId = cartid
-            
+            CartId = cartdto.CartId,
+            CustomerId = cartdto.CustomerId,
         };
 
-        await _context.Carts.AddAsync(newCart);
+        await _context.Carts.AddAsync(cartcreate);
         await _context.SaveChangesAsync();
-
-        return newCart;
-    }
+    } // done
 
     public async Task<bool> UpdateCartAsync(int id, Cart updatedCart)
     {

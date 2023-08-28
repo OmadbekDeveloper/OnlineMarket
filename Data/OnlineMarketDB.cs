@@ -1,22 +1,25 @@
 ﻿
 using OnlineMarket.Models.Other;
+using System;
 
 namespace OnlineMarket.Data
 {
     public class OnlineMarketDB : DbContext
     {
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseNpgsql("Server=localhost; Port=5432; User Id=postgres; Password=gamingpsix7131; Database=OnlineMarket");
-            base.OnConfiguring(optionsBuilder);
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseNpgsql("Server=localhost; Port=5432; User Id=postgres; Password=gamingpsix7131; Database=OnlineMarket");
+        //    base.OnConfiguring(optionsBuilder);
+        //}
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            //AddGroup(modelBuilder);
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    //AddGroup(modelBuilder);
 
-            base.OnModelCreating(modelBuilder);
-        }
+        //    base.OnModelCreating(modelBuilder);
+        //}
+
+        public OnlineMarketDB(DbContextOptions<OnlineMarketDB> options) : base(options) { }
 
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Product> Products { get; set; }
@@ -30,7 +33,7 @@ namespace OnlineMarket.Data
         public DbSet<Cart> Carts { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
         public DbSet<Discount> Discounts { get; set; }
-        public DbSet<ShippingInfo> ShippingInfo { get; set; }
+        public DbSet<ShippingInfo> ShippingInfos { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<ShoppingCartItem> ShoppingCartItems { get; set;}
 

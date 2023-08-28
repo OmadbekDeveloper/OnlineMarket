@@ -4,7 +4,7 @@
     {
         Task<List<Employee>> GetAllEmployeesAsync();
         Task<Employee> GetEmployeeByIdAsync(int id);
-        Task<Employee> CreateEmployeeAsync(Employee employee);
+        Task CreateEmployeeAsync(CreateEmployeeDto employeedto);
         Task<bool> UpdateEmployeeAsync(int id, Employee updatedEmployee);
         Task<bool> DeleteEmployeeAsync(int id);
     }

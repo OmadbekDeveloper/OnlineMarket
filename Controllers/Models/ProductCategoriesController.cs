@@ -1,4 +1,6 @@
-﻿namespace OnlineMarket.Controllers.Models
+﻿using OnlineMarket.Models.Models;
+
+namespace OnlineMarket.Controllers.Models
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -11,24 +13,27 @@
             _context = context;
         }
 
-        [HttpGet("{GetProductCategories}")]
+        [HttpGet("GetProductCategories")]
         public async Task<IActionResult> GetProductCategories()
         {
             var productCategories = await _context.ProductCategories.ToListAsync();
-            return Ok(productCategories);
-        }
+            if (productCategories != null)
+                return NotFound();
 
-        [HttpGet("{GetProductCategory}")]
+            return Ok(productCategories);
+        } // done
+
+        [HttpGet("GetProductCategory")]
         public async Task<IActionResult> GetProductCategory(int id)
         {
             var productCategory = await _context.ProductCategories.FindAsync(id);
-            if (productCategory == null)
+            if (productCategory != null)
                 return NotFound();
 
             return Ok(productCategory);
-        }
+        } // done
 
-        [HttpPost]
+        [HttpPost("CreateProductCategories")]
         public async Task<IActionResult> CreateProductCategory(ProductCategory productCategory)
         {
             _context.ProductCategories.Add(productCategory);
@@ -36,7 +41,7 @@
             return CreatedAtAction(nameof(GetProductCategory), new { id = productCategory.ProductCategoryId }, productCategory);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("UpdateProductCategory")]
         public async Task<IActionResult> UpdateProductCategory(int id, ProductCategory updatedProductCategory)
         {
             if (id != updatedProductCategory.ProductCategoryId)
@@ -47,7 +52,7 @@
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("DeleteProductCategory")]
         public async Task<IActionResult> DeleteProductCategory(int id)
         {
             var productCategory = await _context.ProductCategories.FindAsync(id);

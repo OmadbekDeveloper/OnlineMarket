@@ -1,4 +1,7 @@
 ﻿// Done
+using OnlineMarket.Interfaces.Models;
+using OnlineMarket.Models.Models;
+
 namespace OnlineMarket.Controllers.Models
 {
     [Route("api/[controller]")]
@@ -12,37 +15,37 @@ namespace OnlineMarket.Controllers.Models
             this.cartItemService = cartItemService;
         }
 
-        [HttpGet("{GetCartItemsByCartId}")]
+        [HttpGet("GetCartItemsByCartId")]
         public async Task<IActionResult> GetCartItemsByCartId()
         {
-            var getcartitem = cartItemService.GetCartItemsByCartIdAsync();
-            if (getcartitem == null)
+            var cartitem = await cartItemService.GetCartItemsByCartIdAsync();
+            if (cartitem != null)
                 return NotFound();
 
-            return Ok(getcartitem);
-        }
+            return Ok(cartitem);
+        } // done
 
-        [HttpGet("{GetCartItemById}")]
+        [HttpGet("GetCartItemById")]
         public async Task<IActionResult> GetCartItemById(int id)
         {
-            var getcartItemid = cartItemService.GetCartItemByIdAsync(id);
-            if (getcartItemid == null)
+            var getcartItemid = await cartItemService.GetCartItemByIdAsync(id);
+            if (getcartItemid != null)
                 return NotFound();
 
             return Ok(getcartItemid);
-        }
+        } // done
 
-        [HttpPost("{AddCartItem}")]
-        public async Task<IActionResult> AddCartItem(CartItem cartItem)
+        [HttpPost("AddCartItem")]
+
+        public async Task<IActionResult> AddCartItem([FromForm] CreateCartItemDto cartitemdto)
         {
-            var addcartitem = cartItemService.AddCartItemAsync(cartItem);
-            if (addcartitem == null)
-                return NotFound();
+            await cartItemService.AddCartItemAsync(cartitemdto);
 
-            return Ok(addcartitem);
-        }
+            return Ok("Created");
+        } // done
+        
 
-        [HttpPut("{UpdateCartItem}")]
+        [HttpPut("UpdateCartItem")]
         public async Task<IActionResult> UpdateCartItem(int id, CartItem updatedCartItem)
         {
             var updatecartitem = cartItemService.UpdateCartItemAsync(id, updatedCartItem);
@@ -52,7 +55,7 @@ namespace OnlineMarket.Controllers.Models
             return Ok(updatecartitem);
         }
 
-        [HttpDelete("{RemoveCartItem}")]
+        [HttpDelete("RemoveCartItem")]
         public async Task<IActionResult> RemoveCartItem(int id)
         {
             var deletecartitem = cartItemService.RemoveCartItemAsync(id);

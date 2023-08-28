@@ -1,33 +1,47 @@
-﻿namespace OnlineMarket.Controllers.Models
+﻿using OnlineMarket.Models.Dtos;
+using OnlineMarket.Models.Models;
+
+namespace OnlineMarket.Controllers.Models
 {
     [Route("api/[controller]")]
     [ApiController]
     public class DiscountsController : ControllerBase
     {
-        private readonly OnlineMarketDB _context;
+        private readonly IDiscountService discountService;
 
-        public DiscountsController(OnlineMarketDB context)
+        public DiscountsController(IDiscountService discountService)
         {
-            _context = context;
+            this.discountService = discountService;
         }
 
-        [HttpGet("{GetDiscounts}")]
+        [HttpGet("GetDiscounts")]
         public async Task<IActionResult> GetDiscounts()
         {
-            var discounts = await _context.Discounts.ToListAsync();
-            return Ok(discounts);
-        }
+            var discounts = await discountService.GetAllDiscountsAsync();
+            if (discounts == null)
+                return NotFound();
 
-        [HttpGet("{GetDiscount}")]
+            return Ok(discounts);
+        } // done
+
+        [HttpGet("GetDiscount")]
         public async Task<IActionResult> GetDiscount(int id)
         {
-            var discount = await _context.Discounts.FindAsync(id);
+            var discount = await discountService.GetDiscountByIdAsync(id);
             if (discount == null)
                 return NotFound();
 
             return Ok(discount);
-        }
+        } // done
 
-        // Implement POST, PUT, and DELETE methods similarly
+        [HttpPost("CreateDiscount")]
+
+        public async Task<IActionResult> CreateDiscount(CreateDiscountDto discountdto)
+        {
+            await discountService.CreateDiscountAsync(discountdto);
+
+            return Ok("Created");
+        } // done
+
     }
 }

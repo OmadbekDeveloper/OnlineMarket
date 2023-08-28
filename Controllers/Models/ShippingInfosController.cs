@@ -1,4 +1,6 @@
-﻿namespace OnlineMarket.Controllers.Models
+﻿using OnlineMarket.Models.Models;
+
+namespace OnlineMarket.Controllers.Models
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -11,22 +13,25 @@
             _context = context;
         }
 
-        [HttpGet("{GetShippingInfos}")]
+        [HttpGet("GetShippingInfos")]
         public async Task<IActionResult> GetShippingInfos()
         {
-            var shippingInfos = await _context.ShippingInfo.ToListAsync();
-            return Ok(shippingInfos);
-        }
+            var shippingInfos = await _context.ShippingInfos.ToListAsync();
+            if (shippingInfos != null)
+                return NotFound();
 
-        [HttpGet("{GetShippingInfo}")]
+            return Ok(shippingInfos);
+        } // done
+
+        [HttpGet("GetShippingInfo")]
         public async Task<IActionResult> GetShippingInfo(int id)
         {
-            var shippingInfo = await _context.ShippingInfo.FindAsync(id);
-            if (shippingInfo == null)
+            var shippingInfo = await _context.ShippingInfos.FindAsync(id);
+            if (shippingInfo != null)
                 return NotFound();
 
             return Ok(shippingInfo);
-        }
+        }  // done
 
         // Implement POST, PUT, and DELETE methods similarly
     }

@@ -1,4 +1,4 @@
-﻿// DONE
+﻿
 public class CartItemService : ICartItemService
 {
     private readonly OnlineMarketDB _context;
@@ -10,24 +10,27 @@ public class CartItemService : ICartItemService
 
     public async Task<List<CartItem>> GetCartItemsByCartIdAsync()
     {
-        return await _context.CartItems
-            .Include(item => item.Product)
-            .ToListAsync();
-    }
+        return await _context.CartItems.ToListAsync();
+    } // done
 
     public async Task<CartItem> GetCartItemByIdAsync(int id)
     {
-        return await _context.CartItems
-            .Include(item => item.Product)
-            .FirstOrDefaultAsync(item => item.CartItemId == id);
-    }
+        return await _context.CartItems.FindAsync(id);
+    } // done
 
-    public async Task<CartItem> AddCartItemAsync(CartItem cartItem)
+    public async Task AddCartItemAsync(CreateCartItemDto cartItemdto)
     {
-        await _context.CartItems.AddAsync(cartItem);
+        var cartitemrcreate = new CartItem()
+        {
+            CartItemId = cartItemdto.CartItemId,
+            CartId = cartItemdto.CartId,
+            ProductId = cartItemdto.ProductId,
+            Quantity = cartItemdto.Quantity,
+        };
+
+        await _context.CartItems.AddAsync(cartitemrcreate);
         await _context.SaveChangesAsync();
-        return cartItem;
-    }
+    } // done
 
     public async Task<bool> UpdateCartItemAsync(int id, CartItem updatedCartItem)
     {

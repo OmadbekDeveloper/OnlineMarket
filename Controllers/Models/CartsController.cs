@@ -1,4 +1,7 @@
 ﻿// DONE
+using OnlineMarket.Interfaces.Models;
+using OnlineMarket.Models.Models;
+
 namespace OnlineMarket.Controllers.Models
 {
     [Route("api/[controller]")]
@@ -12,37 +15,35 @@ namespace OnlineMarket.Controllers.Models
             this.cartService = cartService;
         }
 
-        [HttpGet("{GetAllCarts}")]
+        [HttpGet("GetAllCarts")]
         public async Task<IActionResult> GetAllCarts()
         {
-            var getcarts = cartService.GetAllCartsAsync();
-            if (getcarts == null)
+            var getcarts = await cartService.GetAllCartsAsync();
+            if(getcarts == null)
                 return NotFound();
 
             return Ok(getcarts);
-        }
+        } // done
 
-        [HttpGet("{GetCart}")]
+        [HttpGet("GetCart")]
         public async Task<IActionResult> GetCart(int id)
         {
-            var getcart = cartService.GetCartByIdAsync(id);
-            if (getcart == null)
+            var getcart = await cartService.GetCartByIdAsync(id);
+            if (getcart != null)
                 return NotFound();
 
             return Ok(getcart);
-        }
+        } // done
 
-        [HttpPost("{CreateCart}")]
-        public async Task<IActionResult> CreateCart(int CartId)
+        [HttpPost("CreateCart")]
+        public async Task<IActionResult> CreateCart(CreateCartDto createCartDto)
         {
-            var createcart = cartService.CreateCartAsync(CartId);
-            if (createcart == null)
-                return NotFound();
+            await cartService.CreateCartAsync(createCartDto);
 
-            return Ok(createcart);
-        }
+            return Ok("Created");
+        } // done
 
-        [HttpPut("{UpdateCart}")]
+        [HttpPut("UpdateCart")]
         public async Task<IActionResult> UpdateCart(int id, Cart updatedCart)
         {
             var updatecart = cartService.UpdateCartAsync(id, updatedCart);
@@ -52,7 +53,7 @@ namespace OnlineMarket.Controllers.Models
             return Ok(updatecart);
         }
 
-        [HttpDelete("{DeleteCart}")]
+        [HttpDelete("DeleteCart")]
         public async Task<IActionResult> DeleteCart(int id)
         {
             var deletecart = cartService.DeleteCartAsync(id);
@@ -62,7 +63,7 @@ namespace OnlineMarket.Controllers.Models
             return Ok(deletecart);
         }
 
-        [HttpGet("{CalculateCartTotal}")]
+        [HttpGet("CalculateCartTotal")]
         public async Task<IActionResult> CalculateCartTotal(int id)
         {
             var calculatecart = cartService.CalculateCartTotalAsync(id);

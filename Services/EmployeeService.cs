@@ -11,27 +11,31 @@ public class EmployeeService : IEmployeeService
     public async Task<List<Employee>> GetAllEmployeesAsync()
     {
         return await _context.Employees.ToListAsync();
-    }
+    } // done
 
     public async Task<Employee> GetEmployeeByIdAsync(int id)
     {
         return await _context.Employees.FindAsync(id);
-    }
+    } // done
 
-    public async Task<Employee> CreateEmployeeAsync(Employee employee)
+    public async Task CreateEmployeeAsync(CreateEmployeeDto employeedto)
     {
-        var existingEmployee = await _context.Employees.FirstOrDefaultAsync(emp => emp.Email == employee.Email);
-
-        if (existingEmployee != null)
+        var employeecreate = new Employee()
         {
-            throw new Exception("Employee with the same email already exists.");
-        }
+            EmployeeId = employeedto.EmployeeId,
+            FirstName = employeedto.FirstName,
+            LastName = employeedto.LastName,
+            Email = employeedto.Email,
+            Phone = employeedto.Phone,
+            Address = employeedto.Address,
+            Role = employeedto.Role,
+            HireDate = employeedto.HireDate,
+            Salary = employeedto.Salary,
+        };
 
-        await _context.Employees.AddAsync(employee);
+        await _context.Employees.AddAsync(employeecreate);
         await _context.SaveChangesAsync();
-
-        return employee;
-    }
+    } // done
 
     public async Task<bool> UpdateEmployeeAsync(int id, Employee updatedEmployee)
     {

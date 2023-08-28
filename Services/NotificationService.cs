@@ -1,4 +1,4 @@
-﻿//  DONE
+﻿
 public class NotificationService : INotificationService
 {
     private readonly OnlineMarketDB _context;
@@ -11,20 +11,28 @@ public class NotificationService : INotificationService
     public async Task<List<Notification>> GetAllNotificationsAsync()
     {
         return await _context.Notifications.ToListAsync();
-    }
+    } // done
 
     public async Task<Notification> GetNotificationByIdAsync(int id)
     {
         return await _context.Notifications.FindAsync(id);
-    }
+        
+    } // done
 
-    public async Task<Notification> CreateNotificationAsync(Notification notification)
+    public async Task CreateNotificationAsync(CreateNotificationDto notificationdto)
     {
-        await _context.Notifications.AddAsync(notification);
-        await _context.SaveChangesAsync();
+        var notificationrcreate = new Notification()
+        {
+            NotificationId = notificationdto.NotificationId,
+            UserId = notificationdto.UserId,
+            Message = notificationdto.Message,
+            Timestamp = notificationdto.Timestamp,
+            IsRead = notificationdto.IsRead,
+        };
 
-        return notification;
-    }
+        await _context.Notifications.AddAsync(notificationrcreate);
+        await _context.SaveChangesAsync();
+    } // done
 
     public async Task<bool> UpdateNotificationAsync(int id, Notification updatedNotification)
     {

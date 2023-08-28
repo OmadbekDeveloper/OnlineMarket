@@ -1,62 +1,65 @@
-﻿namespace OnlineMarket.Controllers.Models
+﻿using OnlineMarket.Models.Dtos;
+using OnlineMarket.Models.Models;
+
+namespace OnlineMarket.Controllers.Models
 {
     [Route("api/[controller]")]
     [ApiController]
     public class EmployeesController : ControllerBase
     {
-        private readonly OnlineMarketDB _context;
+        private readonly IEmployeeService employeeService;
 
-        public EmployeesController(OnlineMarketDB context)
+        public EmployeesController(IEmployeeService employeeService)
         {
-            _context = context;
+            this.employeeService = employeeService;
         }
 
-        [HttpGet("{GetEmployees}")]
+        [HttpGet("GetEmployees")]
         public async Task<IActionResult> GetEmployees()
         {
-            var employees = await _context.Employees.ToListAsync();
-            return Ok(employees);
-        }
+            var employees = await employeeService.GetAllEmployeesAsync();
+            if (employees == null)
+                return NotFound();
 
-        [HttpGet("{GetEmployee}")]
+            return Ok(employees);
+        } // done
+
+        [HttpGet("GetEmployee")]
         public async Task<IActionResult> GetEmployee(int id)
         {
-            var employee = await _context.Employees.FindAsync(id);
+            var employee = await employeeService.GetEmployeeByIdAsync(id);
             if (employee == null)
                 return NotFound();
 
             return Ok(employee);
-        }
+        } // done
 
-        [HttpPost("{CreateEmployee}")]
-        public async Task<IActionResult> CreateEmployee(Employee employee)
+        [HttpPost("CreateEmployee")]
+        public async Task<IActionResult> CreateEmployee(CreateEmployeeDto employeedto)
         {
-            _context.Employees.Add(employee);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetEmployee), new { id = employee.EmployeeId }, employee);
-        }
+            await employeeService.CreateEmployeeAsync(employeedto);
 
-        [HttpPut("{UpdateEmployee}")]
+            return Ok("Created");
+        } // done
+
+        [HttpPut("UpdateEmployee")]
         public async Task<IActionResult> UpdateEmployee(int id, Employee updatedEmployee)
         {
-            if (id != updatedEmployee.EmployeeId)
-                return BadRequest();
-
-            _context.Entry(updatedEmployee).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-            return NoContent();
-        }
-
-        [HttpDelete("{DeleteEmployee}")]
-        public async Task<IActionResult> DeleteEmployee(int id)
-        {
-            var employee = await _context.Employees.FindAsync(id);
-            if (employee == null)
+            var updateemployee = employeeService.UpdateEmployeeAsync(id, updatedEmployee);
+            if (updateemployee == null)
                 return NotFound();
 
-            _context.Employees.Remove(employee);
-            await _context.SaveChangesAsync();
-            return NoContent();
+            return Ok(updateemployee);
+        }
+
+        [HttpDelete("DeleteEmployee")]
+        public async Task<IActionResult> DeleteEmployee(int id)
+        {
+            var deleteemployee = employeeService.DeleteEmployeeAsync(id);
+            if (deleteemployee == null)
+                return NotFound();
+
+            return Ok(deleteemployee);
         }
     }
 }

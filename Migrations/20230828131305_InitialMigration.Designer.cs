@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using OnlineMarket.Data;
@@ -11,9 +12,11 @@ using OnlineMarket.Data;
 namespace OnlineMarket.Migrations
 {
     [DbContext(typeof(OnlineMarketDB))]
-    partial class OnlineMarketDBModelSnapshot : ModelSnapshot
+    [Migration("20230828131305_InitialMigration")]
+    partial class InitialMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -425,7 +428,7 @@ namespace OnlineMarket.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("ShippingInfos");
+                    b.ToTable("ShippingInfo");
                 });
 
             modelBuilder.Entity("OnlineMarket.Models.Other.ShoppingCartItem", b =>

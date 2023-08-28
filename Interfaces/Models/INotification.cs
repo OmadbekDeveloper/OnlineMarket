@@ -4,7 +4,7 @@
     {
         Task<List<Notification>> GetAllNotificationsAsync();
         Task<Notification> GetNotificationByIdAsync(int id);
-        Task<Notification> CreateNotificationAsync(Notification notification);
+        Task CreateNotificationAsync(CreateNotificationDto notificationdto);
         Task<bool> UpdateNotificationAsync(int id, Notification updatedNotification);
         Task<bool> DeleteNotificationAsync(int id);
         // Add more methods as needed

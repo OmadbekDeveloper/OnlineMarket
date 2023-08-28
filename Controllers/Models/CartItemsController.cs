@@ -19,7 +19,7 @@ namespace OnlineMarket.Controllers.Models
         public async Task<IActionResult> GetCartItemsByCartId()
         {
             var cartitem = await cartItemService.GetCartItemsByCartIdAsync();
-            if (cartitem != null)
+            if (cartitem == null)
                 return NotFound();
 
             return Ok(cartitem);
@@ -29,7 +29,7 @@ namespace OnlineMarket.Controllers.Models
         public async Task<IActionResult> GetCartItemById(int id)
         {
             var getcartItemid = await cartItemService.GetCartItemByIdAsync(id);
-            if (getcartItemid != null)
+            if (getcartItemid == null)
                 return NotFound();
 
             return Ok(getcartItemid);

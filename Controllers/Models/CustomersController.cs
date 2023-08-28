@@ -20,7 +20,7 @@ namespace OnlineMarket.Controllers
         public async Task<IActionResult> GetAllCustomers()
         {
             var customers = await customerService.GetAllCustomersAsync();
-            if (customers != null)
+            if (customers == null)
                 return NotFound();
 
             return Ok(customers);
@@ -30,7 +30,7 @@ namespace OnlineMarket.Controllers
         public async Task<IActionResult> GetCustomerId(int id)
         {
             var customer = await customerService.GetCustomerByIdAsync(id);
-            if (customer != null)
+            if (customer == null)
                 return NotFound();
 
             return Ok(customer);

@@ -17,7 +17,7 @@ namespace OnlineMarket.Controllers.Models
         public async Task<IActionResult> GetProductCategories()
         {
             var productCategories = await _context.ProductCategories.ToListAsync();
-            if (productCategories != null)
+            if (productCategories == null)
                 return NotFound();
 
             return Ok(productCategories);
@@ -27,7 +27,7 @@ namespace OnlineMarket.Controllers.Models
         public async Task<IActionResult> GetProductCategory(int id)
         {
             var productCategory = await _context.ProductCategories.FindAsync(id);
-            if (productCategory != null)
+            if (productCategory == null)
                 return NotFound();
 
             return Ok(productCategory);

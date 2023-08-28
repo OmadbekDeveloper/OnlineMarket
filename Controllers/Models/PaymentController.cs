@@ -6,18 +6,18 @@ namespace OnlineMarket.Controllers.Models
     [ApiController]
     public class PaymentController : ControllerBase
     {
-        private readonly OnlineMarketDB _context;
+        private readonly IPaymentService paymentService;
 
-        public PaymentController(OnlineMarketDB context)
+        public PaymentController(IPaymentService paymentService)
         {
-            _context = context;
+            this.paymentService = paymentService;
         }
 
         [HttpGet("{GetPayments}")]
         public async Task<IActionResult> GetPayments()
         {
-            var payments = await _context.Payments.ToListAsync();
-            if (payments != null)
+            var payments = await paymentService.GetAllPaymentsAsync();
+            if (payments == null)
                 return NotFound();
 
             return Ok(payments);
@@ -26,12 +26,20 @@ namespace OnlineMarket.Controllers.Models
         [HttpGet("{GetPayment}")]
         public async Task<IActionResult> GetPayment(int id)
         {
-            var payment = await _context.Payments.FindAsync(id);
-            if (payment != null)
+            var payment = await paymentService.GetPaymentByIdAsync(id);
+            if (payment == null)
                 return NotFound();
 
             return Ok(payment);
         } // done
+
+        [HttpPost("CreatePayment")]
+        public async Task<IActionResult> CreatePayment(CreatePaymentDto createPaymentDto)
+        {
+            await paymentService.CreatePaymentAsync(createPaymentDto);
+
+            return Ok("Created");
+        }
 
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using OnlineMarket.Data;
@@ -11,9 +12,11 @@ using OnlineMarket.Data;
 namespace OnlineMarket.Migrations
 {
     [DbContext(typeof(OnlineMarketDB))]
-    partial class OnlineMarketDBModelSnapshot : ModelSnapshot
+    [Migration("20230828215713_AddModelColums")]
+    partial class AddModelColums
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -235,6 +238,12 @@ namespace OnlineMarket.Migrations
                     b.Property<decimal>("OrderTotal")
                         .HasColumnType("numeric");
 
+                    b.Property<int>("PaymentId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("PaymentId1")
+                        .HasColumnType("integer");
+
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
@@ -249,6 +258,8 @@ namespace OnlineMarket.Migrations
                     b.HasIndex("DiscountId");
 
                     b.HasIndex("EmployeeId");
+
+                    b.HasIndex("PaymentId1");
 
                     b.ToTable("Orders");
                 });
@@ -304,8 +315,6 @@ namespace OnlineMarket.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("PaymentId");
-
-                    b.HasIndex("OrderId");
 
                     b.ToTable("Payments");
                 });
@@ -500,9 +509,17 @@ namespace OnlineMarket.Migrations
                         .WithMany("Orders")
                         .HasForeignKey("EmployeeId");
 
+                    b.HasOne("OnlineMarket.Models.Models.Payment", "Payment")
+                        .WithMany()
+                        .HasForeignKey("PaymentId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Customer");
 
                     b.Navigation("Employee");
+
+                    b.Navigation("Payment");
                 });
 
             modelBuilder.Entity("OnlineMarket.Models.Models.OrderItem", b =>
@@ -522,17 +539,6 @@ namespace OnlineMarket.Migrations
                     b.Navigation("Order");
 
                     b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("OnlineMarket.Models.Models.Payment", b =>
-                {
-                    b.HasOne("OnlineMarket.Models.Models.Order", "Order")
-                        .WithMany()
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("OnlineMarket.Models.Models.ProductCategory", b =>

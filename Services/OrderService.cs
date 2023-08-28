@@ -18,31 +18,20 @@ public class OrderService : IOrderService
         return await _context.Orders.FindAsync(id);
     } // done
 
-    public async Task<Order> CreateOrderAsync(Order order)
+    public async Task CreateOrderAsync(CreateOrderDto orderdto)
     {
-        var existingCustomer = await _context.Customers.FindAsync(order.CustomerId);
-        var existingEmployee = order.EmployeeId.HasValue ? await _context.Employees.FindAsync(order.EmployeeId.Value) : null;
-        var existingPayment = await _context.Payments.FindAsync(order.PaymentId);
-
-        if (existingCustomer == null)
+        var ordercreate = new Order()
         {
-            throw new Exception("Customer not found.");
-        }
+            OrderId = orderdto.OrderId,
+            CustomerId = orderdto.CustomerId,
+            EmployeeId = orderdto.EmployeeId,
+            OrderDate = orderdto.OrderDate,
+            Statuss = orderdto.Statuss,
+            OrderTotal = orderdto.OrderTotal,
+        };
 
-        order.OrderDate = DateTime.Now;
-        order.Status = OrderStatus.Pending;
-
-        order.OrderTotal = order.OrderItems.Sum(item => item.Product.Price * item.Quantity);
-
-        if (existingEmployee != null)
-        {
-            order.Employee = existingEmployee;
-        }
-
-        await _context.Orders.AddAsync(order);
+        await _context.Orders.AddAsync(ordercreate);
         await _context.SaveChangesAsync();
-
-        return order;
     }
 
     public async Task<bool> UpdateOrderAsync(int id, Order updatedOrder)
@@ -55,8 +44,7 @@ public class OrderService : IOrderService
             return false;
         }
 
-        existingOrder.Status = updatedOrder.Status;
-        existingOrder.Payment = updatedOrder.Payment;
+       
 
         _context.Orders.Update(existingOrder);
         await _context.SaveChangesAsync();

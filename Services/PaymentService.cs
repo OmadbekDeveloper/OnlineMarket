@@ -20,21 +20,19 @@ public class PaymentService : IPaymentService
         return await _context.Payments.FindAsync(id);
     } // done
 
-    public async Task<Payment> CreatePaymentAsync(int OrderId, Payment payment)
+    public async Task CreatePaymentAsync(CreatePaymentDto createPaymentDto)
     {
-        var existingOrder = await _context.Orders.FirstOrDefaultAsync(x => x.OrderId == OrderId);
-
-        if (existingOrder == null)
+        var paymentcreate = new Payment()
         {
-            throw new Exception("Order not found.");
-        }
-        payment.PaymentDate = DateTime.Now;
-        existingOrder.PaymentId=payment.PaymentId;
+            PaymentId = createPaymentDto.PaymentId,
+            OrderId = createPaymentDto.OrderId,
+            PaymentDate = createPaymentDto.PaymentDate,
+            Amount = createPaymentDto.Amount,
+            PaymentMethod = createPaymentDto.PaymentMethod,
+        };
 
-        await _context.Payments.AddAsync(payment);
+        await _context.Payments.AddAsync(paymentcreate);
         await _context.SaveChangesAsync();
-
-        return payment;
     }
 
     public async Task<bool> UpdatePaymentAsync(int id, Payment payment)

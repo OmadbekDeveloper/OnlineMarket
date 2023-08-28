@@ -17,7 +17,7 @@ namespace OnlineMarket.Controllers.Models
         public async Task<IActionResult> GetReviews()
         {
             var reviews = await _context.Reviews.ToListAsync();
-            if (reviews != null)
+            if (reviews == null)
                 return NotFound();
 
             return Ok(reviews);
@@ -27,7 +27,7 @@ namespace OnlineMarket.Controllers.Models
         public async Task<IActionResult> GetReview(int id)
         {
             var review = await _context.Reviews.FindAsync(id);
-            if (review != null)
+            if (review == null)
                 return NotFound();
 
             return Ok(review);

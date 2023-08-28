@@ -20,7 +20,7 @@ namespace OnlineMarket.Controllers.Models
         public async Task<IActionResult> GetAllCategories()
         {
             var customers = await categoryService.GetAllCategoriesAsync();
-            if (customers != null)
+            if (customers == null)
                 return NotFound();
 
             return Ok(customers);
@@ -30,7 +30,7 @@ namespace OnlineMarket.Controllers.Models
         public async Task<IActionResult> GetCategoryById(int id)
         {
             var getcategory = await categoryService.GetCategoryByIdAsync(id);
-            if (getcategory != null)
+            if (getcategory == null)
                 return NotFound();
 
             return Ok(getcategory);

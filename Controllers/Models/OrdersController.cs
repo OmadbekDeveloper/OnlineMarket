@@ -6,18 +6,18 @@ namespace OnlineMarket.Controllers.Models
     [ApiController]
     public class OrdersController : ControllerBase
     {
-        private readonly OnlineMarketDB _context;
+        private readonly IOrderService orderService;
 
-        public OrdersController(OnlineMarketDB context)
+        public OrdersController(IOrderService orderService)
         {
-            _context = context;
+            this.orderService = orderService;
         }
 
         [HttpGet("{GetOrders}")]
         public async Task<IActionResult> GetOrders()
         {
-            var orders = await _context.Orders.ToListAsync();
-            if (orders != null)
+            var orders = await orderService.GetAllOrdersAsync();
+            if (orders == null)
                 return NotFound();
 
             return Ok(orders);
@@ -26,13 +26,20 @@ namespace OnlineMarket.Controllers.Models
         [HttpGet("{GetOrder}")]
         public async Task<IActionResult> GetOrder(int id)
         {
-            var order = await _context.Orders.FindAsync(id);
-            if (order != null)
+            var order = await orderService.GetOrderByIdAsync(id);
+            if (order == null)
                 return NotFound();
 
             return Ok(order);
         } // done
 
-        // Implement POST, PUT, and DELETE methods similarly
+        [HttpPost("CreateOrder")]
+        public async Task<IActionResult> CreateOrder(CreateOrderDto createorderdto)
+        {
+            await orderService.CreateOrderAsync(createorderdto);
+
+            return Ok("Created");
+        } // done?
+
     }
 }

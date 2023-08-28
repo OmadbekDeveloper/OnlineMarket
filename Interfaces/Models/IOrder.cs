@@ -6,7 +6,7 @@ namespace OnlineMarket.Interfaces.Models
     {
         Task<List<Order>> GetAllOrdersAsync();
         Task<Order> GetOrderByIdAsync(int id);
-        Task<Order> CreateOrderAsync(Order order);
+        Task CreateOrderAsync(CreateOrderDto orderdto);
         Task<bool> UpdateOrderAsync(int id, Order updatedOrder);
         Task<bool> DeleteOrderAsync(int id);
         Task<decimal> CalculateOrderTotalAsync(int id);

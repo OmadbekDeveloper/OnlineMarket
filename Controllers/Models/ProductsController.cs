@@ -20,7 +20,7 @@ namespace OnlineMarket.Controllers.Models
         public async Task<IActionResult> GetProducts()
         {
             var getproducts = productService.GetProductsAsync();
-            if (getproducts != null)
+            if (getproducts == null)
                 return NotFound();
 
             return Ok(getproducts);
@@ -30,7 +30,7 @@ namespace OnlineMarket.Controllers.Models
         public async Task<IActionResult> GetProduct(int id)
         {
             var getproduct = productService.GetProductByIdAsync(id);
-            if (getproduct != null)
+            if (getproduct == null)
                 return NotFound();
 
             return Ok(getproduct);

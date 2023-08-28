@@ -29,7 +29,7 @@ namespace OnlineMarket.Controllers.Models
         public async Task<IActionResult> GetCart(int id)
         {
             var getcart = await cartService.GetCartByIdAsync(id);
-            if (getcart != null)
+            if (getcart == null)
                 return NotFound();
 
             return Ok(getcart);

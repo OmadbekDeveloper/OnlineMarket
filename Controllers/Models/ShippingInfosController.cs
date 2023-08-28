@@ -17,7 +17,7 @@ namespace OnlineMarket.Controllers.Models
         public async Task<IActionResult> GetShippingInfos()
         {
             var shippingInfos = await _context.ShippingInfos.ToListAsync();
-            if (shippingInfos != null)
+            if (shippingInfos == null)
                 return NotFound();
 
             return Ok(shippingInfos);
@@ -27,7 +27,7 @@ namespace OnlineMarket.Controllers.Models
         public async Task<IActionResult> GetShippingInfo(int id)
         {
             var shippingInfo = await _context.ShippingInfos.FindAsync(id);
-            if (shippingInfo != null)
+            if (shippingInfo == null)
                 return NotFound();
 
             return Ok(shippingInfo);

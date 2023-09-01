@@ -19,17 +19,17 @@ namespace OnlineMarket.Controllers.Models
         [HttpGet("GetProducts")]
         public async Task<IActionResult> GetProducts()
         {
-            var getproducts = productService.GetProductsAsync();
+            var getproducts = await productService.GetProductsAsync();
             if (getproducts == null)
                 return NotFound();
 
-            return Ok("Get all prroducts");
+            return Ok(getproducts);
         } // done
 
         [HttpGet("GetProduct")]
         public async Task<IActionResult> GetProduct(int id)
         {
-            var getproduct = productService.GetProductByIdAsync(id);
+            var getproduct = await productService.GetProductByIdAsync(id);
             if (getproduct == null)
                 return NotFound();
 

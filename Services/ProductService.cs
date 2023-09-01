@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.EntityFrameworkCore;
 using OnlineMarket.Models.Models;
 
 public class ProductService : IProductService
@@ -67,18 +68,22 @@ public class ProductService : IProductService
 
     public async Task<bool> UpdateProductAsync(int id, Product productid)
     {
-        var existingOrder = await _context.Products.FindAsync(id);
+        var existingProduct = await _context.Products.FindAsync(productid);
 
-        if (existingOrder == null)
+        if (existingProduct == null)
         {
-            throw new Exception("Order not found.");
+            throw new Exception("Product not found.");
             return false;
         }
 
+        // Update the properties of the existing product with the new values
+        existingProduct.Name = productid.Name;
+        existingProduct.Description = productid.Description;
+        existingProduct.Price = productid.Price;
+        existingProduct.StockQuantity = productid.StockQuantity;
 
-
-        _context.Products.Update(existingOrder);
         await _context.SaveChangesAsync();
+
         return true;
     }
 

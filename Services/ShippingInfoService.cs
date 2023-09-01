@@ -1,5 +1,7 @@
 ﻿
 
+using OnlineMarket.Models.Dtos;
+
 public class ShippingInfoService : IShippingInfoService
 {
     private readonly OnlineMarketDB _context;
@@ -18,12 +20,21 @@ public class ShippingInfoService : IShippingInfoService
         return await _context.ShippingInfos.FindAsync(orderId);
     } // done
 
-    public async Task<ShippingInfo> CreateShippingInfoAsync(ShippingInfo shippingInfo)
+    public async Task CreateShippingInfoAsync(CreateShippingInfoDto createShippingInfoDto)
     {
-        await _context.ShippingInfos.AddAsync(shippingInfo);
+        var shippinginfocreate = new ShippingInfo()
+        {
+            ShippingInfoId = createShippingInfoDto.ShippingInfoId,
+            OrderId = createShippingInfoDto.OrderId,
+            Address = createShippingInfoDto.Address,
+            City = createShippingInfoDto.City,
+            PostalCode = createShippingInfoDto.PostalCode,
+            Country = createShippingInfoDto.Country,
+        };
+
+        await _context.ShippingInfos.AddAsync(shippinginfocreate);
         await _context.SaveChangesAsync();
-        return shippingInfo;
-    }
+    } // orderid not
 
     public async Task<bool> UpdateShippingInfoAsync(int orderId, ShippingInfo updatedShippingInfo)
     {

@@ -1,4 +1,6 @@
 ﻿
+using OnlineMarket.Models.Models;
+
 public class ProductService : IProductService
 {
     private readonly OnlineMarketDB _context;
@@ -18,7 +20,7 @@ public class ProductService : IProductService
         return await _context.Products.FindAsync(id);
     } // done
 
-    public async Task CreateProductAsync(CreateProductDto productdto)
+    public async Task CreateProductAsync(ProductDto productdto)
     {
         var productcreate = new Product()
         {
@@ -33,23 +35,65 @@ public class ProductService : IProductService
         await _context.SaveChangesAsync();
     } // done
 
-    public async Task<Product> UpdateProductAsync(int id, Product updatedProduct)
-    {
-        if (id != updatedProduct.ProductId)
-            throw new ArgumentException("Id mismatch");
+    //public async Task UpdateProductAsync(ProductDto updateProductDto, int id, Product productid)
+    //{
+    //    //try
+    //    //{
+    //    //    var productupdate = await _context.Products.FindAsync(id, productid.ProductId);
 
-        _context.Entry(updatedProduct).State = EntityState.Modified;
+    //    //    if (productupdate == null)
+    //    //    {
+    //    //        throw new Exception("Payment not found.");
+    //    //    }
+
+    //    //    productupdate = new Product()
+    //    //    {
+    //    //        ProductId = updateProductDto.ProductId,
+    //    //        Name = updateProductDto.Name,
+    //    //        Description = updateProductDto.Description,
+    //    //        Price = updateProductDto.Price,
+    //    //        StockQuantity = updateProductDto.StockQuantity,
+    //    //    };
+
+    //    //    _context.Products.Update(productupdate);
+    //    //    await _context.SaveChangesAsync();
+    //    //}
+    //    //catch (Exception ex)
+    //    //{
+    //    //    Console.WriteLine("Error product update");
+    //    //}
+
+    //}
+
+    public async Task<bool> UpdateProductAsync(int id, Product productid)
+    {
+        var existingOrder = await _context.Products.FindAsync(id);
+
+        if (existingOrder == null)
+        {
+            throw new Exception("Order not found.");
+            return false;
+        }
+
+
+
+        _context.Products.Update(existingOrder);
         await _context.SaveChangesAsync();
-        return updatedProduct;
+        return true;
     }
 
-    public async Task DeleteProductAsync(int id)
+    public async Task<bool> DeleteProductAsync(int id, Product productid)
     {
-        var product = await _context.Products.FindAsync(id);
-        if (product == null)
-            throw new DllNotFoundException("Product not found");
+        var order = await _context.Products.FindAsync(id);
 
-        _context.Products.Remove(product);
+        if (order == null)
+        {
+            throw new Exception("Order not found.");
+            return false;
+        }
+
+        _context.Products.Remove(order);
         await _context.SaveChangesAsync();
+        return true;
     }
 }

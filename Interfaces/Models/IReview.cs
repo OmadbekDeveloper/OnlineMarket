@@ -4,7 +4,7 @@
     {
         Task<List<Review>> GetReviewsByProductIdAsync();
         Task<Review> GetReviewByIdAsync(int id);
-        Task<Review> AddReviewAsync(Review review);
+        Task AddReviewAsync(CreateReviewDto createReviewDto);
         Task<bool> UpdateReviewAsync(int id, Review updatedReview);
         Task<bool> DeleteReviewAsync(int id);
         // Add more methods as needed

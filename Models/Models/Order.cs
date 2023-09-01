@@ -10,8 +10,8 @@
         public decimal OrderTotal { get; internal set; }
 
         public OrderStatus Status { get; set; }
-        public Customer Customer { get; set; }
-        public Employee Employee { get; set; }
+        public ICollection<Customer> Customer { get; set; }
+        public ICollection<Employee> Employee { get; set; }
         public ICollection<OrderItem> OrderItems { get; set; }
     }
 }

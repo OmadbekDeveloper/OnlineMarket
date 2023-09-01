@@ -23,7 +23,7 @@ namespace OnlineMarket.Controllers.Models
             if (getproducts == null)
                 return NotFound();
 
-            return Ok(getproducts);
+            return Ok("Get all prroducts");
         } // done
 
         [HttpGet("GetProduct")]
@@ -37,7 +37,7 @@ namespace OnlineMarket.Controllers.Models
         } // done
 
         [HttpPost("CreateProduct")]
-        public async Task<IActionResult> CreateProduct(CreateProductDto productdto)
+        public async Task<IActionResult> CreateProduct(ProductDto productdto)
         {
             await productService.CreateProductAsync (productdto);
 
@@ -45,19 +45,19 @@ namespace OnlineMarket.Controllers.Models
         } // done
 
         [HttpPut("UpdateProduct")]
-        public async Task<IActionResult> UpdateProduct(int id, Product updatedProduct)
+        public async Task<IActionResult> UpdateProduct(int id, Product productid)
         {
-            var updateproduct = productService.UpdateProductAsync(id, updatedProduct);
-            if (updatedProduct == null)
+            var updateproduct = productService.UpdateProductAsync( id, productid);
+            if (updateproduct == null)
                 return NotFound();
 
-            return Ok(updatedProduct);
+            return Ok("Update Product");
         }
 
         [HttpDelete("DeleteProduct")]
-        public async Task<IActionResult> DeleteProduct(int id)
+        public async Task<IActionResult> DeleteProduct(int id, Product productid)
         {
-            var deleteproduct = productService.DeleteProductAsync(id);
+            var deleteproduct = productService.DeleteProductAsync(id, productid);
             if (deleteproduct == null)
                 return NotFound();
 

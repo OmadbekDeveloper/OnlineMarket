@@ -6,31 +6,43 @@ namespace OnlineMarket.Controllers.Models
     [ApiController]
     public class ReviewsController : ControllerBase
     {
-        private readonly OnlineMarketDB _context;
+        private readonly IReviewService reviewService;
 
-        public ReviewsController(OnlineMarketDB context)
+        public ReviewsController(IReviewService reviewService)
         {
-            _context = context;
+            this.reviewService = reviewService;
         }
 
-        [HttpGet("{GetReviews}")]
+        [HttpGet("GetReviews")]
         public async Task<IActionResult> GetReviews()
         {
-            var reviews = await _context.Reviews.ToListAsync();
+            var reviews = await reviewService.GetReviewsByProductIdAsync();
             if (reviews == null)
                 return NotFound();
 
             return Ok(reviews);
         } // done
 
-        [HttpGet("{GetReview}")]
+        [HttpGet("GetReview")]
         public async Task<IActionResult> GetReview(int id)
         {
-            var review = await _context.Reviews.FindAsync(id);
+            var review = await reviewService.GetReviewByIdAsync(id);
             if (review == null)
                 return NotFound();
 
             return Ok(review);
+        } // done
+
+        [HttpPost("AddReview")]
+        public async Task<IActionResult> AddReview(CreateReviewDto createReviewDto)
+        {
+            await reviewService.AddReviewAsync(createReviewDto);
+            if(createReviewDto == null)
+            {
+                return NotFound();
+            }
+
+            return Ok("Added");
         } // done
 
         // Implement POST, PUT, and DELETE methods similarly

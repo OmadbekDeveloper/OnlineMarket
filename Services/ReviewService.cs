@@ -19,12 +19,21 @@ public class ReviewService : IReviewService
         return await _context.Reviews.FindAsync(id);
     } // done
 
-    public async Task<Review> AddReviewAsync(Review review)
+    public async Task AddReviewAsync(CreateReviewDto createReviewDto)
     {
-        _context.Reviews.Add(review);
+        var reviewcreate = new Review()
+        {
+             ReviewId = createReviewDto.ReviewId,
+             ProductId = createReviewDto.ProductId,
+             UserId = createReviewDto.UserId,
+             ReviewText = createReviewDto.ReviewText,
+             ReviewDate = createReviewDto.ReviewDate,
+             Ratings = createReviewDto.Ratings,
+        };
+
+        await _context.Reviews.AddAsync(reviewcreate);
         await _context.SaveChangesAsync();
-        return review;
-    }
+    } // done
 
     public async Task<bool> UpdateReviewAsync(int id, Review updatedReview)
     {

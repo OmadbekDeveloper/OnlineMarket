@@ -1,4 +1,6 @@
-﻿using OnlineMarket.Models.Models;
+﻿using OnlineMarket.Interfaces.Models;
+using OnlineMarket.Models.Dtos;
+using OnlineMarket.Models.Models;
 
 namespace OnlineMarket.Controllers.Models
 {
@@ -6,17 +8,17 @@ namespace OnlineMarket.Controllers.Models
     [ApiController]
     public class ShippingInfosController : ControllerBase
     {
-        private readonly OnlineMarketDB _context;
+        private readonly IShippingInfoService shippingInfoService;
 
-        public ShippingInfosController(OnlineMarketDB context)
+        public ShippingInfosController(IShippingInfoService shippingInfoService)
         {
-            _context = context;
+            this.shippingInfoService = shippingInfoService;
         }
 
         [HttpGet("GetShippingInfos")]
         public async Task<IActionResult> GetShippingInfos()
         {
-            var shippingInfos = await _context.ShippingInfos.ToListAsync();
+            var shippingInfos = await shippingInfoService.GetShippingInfoByOrderAsync();
             if (shippingInfos == null)
                 return NotFound();
 
@@ -26,12 +28,24 @@ namespace OnlineMarket.Controllers.Models
         [HttpGet("GetShippingInfo")]
         public async Task<IActionResult> GetShippingInfo(int id)
         {
-            var shippingInfo = await _context.ShippingInfos.FindAsync(id);
+            var shippingInfo = await shippingInfoService.GetShippingInfoByOrderIdAsync(id);
             if (shippingInfo == null)
                 return NotFound();
 
             return Ok(shippingInfo);
         }  // done
+
+        [HttpPost("CreateShippingInfo")]
+        public async Task<IActionResult> CreateShippingInfo(CreateShippingInfoDto createShippingInfoDto)
+        {
+            await shippingInfoService.CreateShippingInfoAsync(createShippingInfoDto);
+            if (createShippingInfoDto == null)
+            {
+                return NotFound();
+            }
+
+            return Ok("Added");
+        }  // orderid not
 
         // Implement POST, PUT, and DELETE methods similarly
     }

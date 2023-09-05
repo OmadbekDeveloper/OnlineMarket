@@ -1,4 +1,6 @@
-﻿namespace OnlineMarket.Interfaces.Models
+﻿using OnlineMarket.Models.Dtos.Employee;
+
+namespace OnlineMarket.Interfaces.Models
 {
     public interface IEmployeeService
     {

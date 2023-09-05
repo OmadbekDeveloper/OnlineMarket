@@ -1,4 +1,6 @@
 ﻿
+using OnlineMarket.Models.Dtos.Discount;
+
 public class DiscountService : IDiscountService
 {
     private readonly OnlineMarketDB _context;

@@ -1,4 +1,6 @@
-﻿namespace OnlineMarket.Interfaces.Models
+﻿using OnlineMarket.Models.Dtos.Payment;
+
+namespace OnlineMarket.Interfaces.Models
 {
     public interface IPaymentService
     {

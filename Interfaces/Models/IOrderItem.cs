@@ -1,4 +1,6 @@
-﻿namespace OnlineMarket.Interfaces.Models
+﻿using OnlineMarket.Models.Dtos.OrderItem;
+
+namespace OnlineMarket.Interfaces.Models
 {
     public interface IOrderItemService
     {

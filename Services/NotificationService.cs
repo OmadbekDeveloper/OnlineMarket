@@ -1,4 +1,6 @@
 ﻿
+using OnlineMarket.Models.Dtos.Notification;
+
 public class NotificationService : INotificationService
 {
     private readonly OnlineMarketDB _context;

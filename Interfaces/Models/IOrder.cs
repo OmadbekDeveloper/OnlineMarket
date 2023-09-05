@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using OnlineMarket.Models.Dtos.Order;
 
 namespace OnlineMarket.Interfaces.Models
 {

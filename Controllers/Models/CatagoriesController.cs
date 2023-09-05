@@ -1,6 +1,6 @@
 ﻿// DONE
 using OnlineMarket.Interfaces.Models;
-using OnlineMarket.Models.Dtos;
+using OnlineMarket.Models.Dtos.Category;
 using OnlineMarket.Models.Models;
 
 namespace OnlineMarket.Controllers.Models

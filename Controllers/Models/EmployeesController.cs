@@ -1,4 +1,4 @@
-﻿using OnlineMarket.Models.Dtos;
+﻿using OnlineMarket.Models.Dtos.Employee;
 using OnlineMarket.Models.Models;
 
 namespace OnlineMarket.Controllers.Models

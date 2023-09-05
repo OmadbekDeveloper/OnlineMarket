@@ -1,4 +1,5 @@
-﻿using OnlineMarket.Models.Models;
+﻿using OnlineMarket.Models.Dtos.Order;
+using OnlineMarket.Models.Models;
 
 namespace OnlineMarket.Controllers.Models
 {

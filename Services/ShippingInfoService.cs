@@ -1,6 +1,4 @@
-﻿
-
-using OnlineMarket.Models.Dtos;
+﻿using OnlineMarket.Models.Dtos.ShippingInfo;
 
 public class ShippingInfoService : IShippingInfoService
 {

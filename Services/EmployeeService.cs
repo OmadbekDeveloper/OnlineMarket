@@ -1,4 +1,6 @@
 ﻿// DONE
+using OnlineMarket.Models.Dtos.Employee;
+
 public class EmployeeService : IEmployeeService
 {
     private readonly OnlineMarketDB _context;

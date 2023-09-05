@@ -1,4 +1,6 @@
-﻿public class OrderItemService : IOrderItemService
+﻿using OnlineMarket.Models.Dtos.OrderItem;
+
+public class OrderItemService : IOrderItemService
 {
     private readonly OnlineMarketDB _context;
 

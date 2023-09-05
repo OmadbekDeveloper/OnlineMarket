@@ -1,5 +1,5 @@
 ﻿using OnlineMarket.Interfaces.Models;
-using OnlineMarket.Models.Dtos;
+using OnlineMarket.Models.Dtos.ShippingInfo;
 using OnlineMarket.Models.Models;
 
 namespace OnlineMarket.Controllers.Models

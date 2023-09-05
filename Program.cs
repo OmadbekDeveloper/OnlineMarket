@@ -30,7 +30,7 @@ namespace OnlineMarket
             builder.Services.AddTransient<IProductService, ProductService>();
             builder.Services.AddTransient<IReviewService, ReviewService>();
             builder.Services.AddTransient<IShippingInfoService, ShippingInfoService>();
-            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            //builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             builder.Services.AddTransient<ICustomerService, CustomerService>();
 

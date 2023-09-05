@@ -25,7 +25,6 @@
 
   <ItemGroup>
     <Folder Include="Frondent\" />
-    <Folder Include="Models\Dtos\Cart\" />
   </ItemGroup>
 
 </Project>

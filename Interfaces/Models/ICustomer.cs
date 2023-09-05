@@ -1,5 +1,5 @@
 ﻿// DONE
-using OnlineMarket.Models.Dtos;
+using OnlineMarket.Models.Dtos.Customer;
 
 namespace OnlineMarket.Interfaces.Models
 {

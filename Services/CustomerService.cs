@@ -1,6 +1,6 @@
 ﻿// DONE
 using Microsoft.EntityFrameworkCore;
-using OnlineMarket.Models.Dtos;
+using OnlineMarket.Models.Dtos.Customer;
 
 public class CustomerService : ICustomerService
 {

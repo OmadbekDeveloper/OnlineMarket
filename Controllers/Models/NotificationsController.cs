@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OnlineMarket.Models.Dtos.Notification;
 using OnlineMarket.Models.Models;
 
 namespace OnlineMarket.Controllers.Models

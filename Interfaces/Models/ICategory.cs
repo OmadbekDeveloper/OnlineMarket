@@ -1,4 +1,6 @@
 ﻿// DONE
+using OnlineMarket.Models.Dtos.Category;
+
 namespace OnlineMarket.Interfaces.Models
 {
     public interface ICategoryService

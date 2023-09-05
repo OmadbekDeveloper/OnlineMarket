@@ -1,4 +1,6 @@
-﻿namespace OnlineMarket.Interfaces.Models
+﻿using OnlineMarket.Models.Dtos.Notification;
+
+namespace OnlineMarket.Interfaces.Models
 {
     public interface INotificationService
     {

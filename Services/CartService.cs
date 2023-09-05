@@ -1,4 +1,6 @@
-﻿public class CartService : ICartService
+﻿using OnlineMarket.Models.Dtos.Cart;
+
+public class CartService : ICartService
 {
     private readonly OnlineMarketDB _context;
 
@@ -17,7 +19,7 @@
         return await _context.Carts.FindAsync(id);
     } // done
 
-    public async Task CreateCartAsync(CreateCartDto cartdto)
+    public async Task CreateCartAsync(UniversalCartDto cartdto)
     {
         var cartcreate = new Cart()
         {

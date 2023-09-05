@@ -1,5 +1,6 @@
 ﻿// Done
 using OnlineMarket.Interfaces.Models;
+using OnlineMarket.Models.Dtos.CartItem;
 using OnlineMarket.Models.Models;
 
 namespace OnlineMarket.Controllers.Models

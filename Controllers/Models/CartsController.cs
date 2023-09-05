@@ -1,5 +1,6 @@
 ﻿// DONE
 using OnlineMarket.Interfaces.Models;
+using OnlineMarket.Models.Dtos.Cart;
 using OnlineMarket.Models.Models;
 
 namespace OnlineMarket.Controllers.Models
@@ -36,7 +37,7 @@ namespace OnlineMarket.Controllers.Models
         } // done
 
         [HttpPost("CreateCart")]
-        public async Task<IActionResult> CreateCart(CreateCartDto createCartDto)
+        public async Task<IActionResult> CreateCart(UniversalCartDto createCartDto)
         {
             await cartService.CreateCartAsync(createCartDto);
 

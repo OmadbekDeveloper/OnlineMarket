@@ -1,4 +1,6 @@
 ﻿// DONE
+using OnlineMarket.Models.Dtos.CartItem;
+
 namespace OnlineMarket.Interfaces.Models
 {
     public interface ICartItemService

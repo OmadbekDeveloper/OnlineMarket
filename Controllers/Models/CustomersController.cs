@@ -1,6 +1,7 @@
 
 
 using OnlineMarket.Interfaces.Models;
+using OnlineMarket.Models.Dtos.Customer;
 using OnlineMarket.Models.Models;
 
 namespace OnlineMarket.Controllers

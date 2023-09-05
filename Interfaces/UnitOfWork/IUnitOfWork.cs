@@ -1,6 +1,4 @@
 ﻿
-using OnlineMarket.Interfaces.Repasitories.Services;
-
 namespace OnlineMarket.Interfaces.UnitOfWork
 {
     public interface IUnitOfWork

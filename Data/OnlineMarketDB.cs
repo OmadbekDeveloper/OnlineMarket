@@ -1,23 +1,8 @@
 ﻿
-using OnlineMarket.Models.Other;
-using System;
-
 namespace OnlineMarket.Data
 {
     public class OnlineMarketDB : DbContext
     {
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    optionsBuilder.UseNpgsql("Server=localhost; Port=5432; User Id=postgres; Password=gamingpsix7131; Database=OnlineMarket");
-        //    base.OnConfiguring(optionsBuilder);
-        //}
-
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    //AddGroup(modelBuilder);
-
-        //    base.OnModelCreating(modelBuilder);
-        //}
 
         public OnlineMarketDB(DbContextOptions<OnlineMarketDB> options) : base(options) { }
 
@@ -37,10 +22,5 @@ namespace OnlineMarket.Data
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<ShoppingCartItem> ShoppingCartItems { get; set;}
 
-        //public DbSet<User> Users { get; set; }
-        //public DbSet<Role> Roles { get; set; }
-        //public DbSet<UserProfileUpdateModel> UserProfiles { get; set; }
-        //public DbSet<LoginModel> LoginModels { get; set; }
-        //public DbSet<RegisterModel> RegisterModels { get; set; }
     }
 }

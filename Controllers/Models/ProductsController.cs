@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Cors.Infrastructure;
-using OnlineMarket.Helper;
-using OnlineMarket.Interfaces.Models;
-using OnlineMarket.Models.Dtos.Product;
-using OnlineMarket.Models.Models;
-
+﻿
 namespace OnlineMarket.Controllers.Models
 {
     [Route("api/[controller]")]
@@ -18,49 +13,43 @@ namespace OnlineMarket.Controllers.Models
         }
 
         [HttpGet("GetProducts")]
-        public async Task<IActionResult> GetProducts()
+        public async Task<Responce<IEnumerable<ResultProductDto>>> GetProducts()
         {
             var getproducts = await productService.GetProductsAsync();
-            if (getproducts == null)
-                return NotFound();
 
-            return Ok(getproducts);
+            return getproducts;
         } // done
 
         [HttpGet("GetProduct")]
-        public async Task<IActionResult> GetProduct(int id)
+        public async Task<Responce<ResultProductDto>> GetProduct(int id)
         {
             var getproduct = await productService.GetProductByIdAsync(id);
-            if (getproduct == null)
-                return NotFound();
 
-            return Ok(getproduct);
+            return getproduct;
         } // done
 
         [HttpPost("CreateProduct")]
-        public async Task<IActionResult> CreateProduct(CreateProductDto productdto)
+        public async Task<Responce<IEnumerable<CreateProductDto>>> CreateProduct(CreateProductDto productdto)
         {
-            await productService.CreateProductAsync(productdto);
+            var createproduct = await productService.CreateProductAsync(productdto);
 
-            return Ok("Created");
+            return createproduct;
         } // done
 
         [HttpPut("UpdateProduct")]
-        public async Task<IActionResult> UpdateProduct(int id, Product productid)
+        public async Task<Responce<IEnumerable<UpdateProductDto>>> UpdateProduct(int id, Product productid)
         {
-            var updateproduct = productService.UpdateProductAsync(id, productid);
-            if (updateproduct == null)
-                return NotFound();
+            var updateproduct = await productService.UpdateProductAsync(id, productid);
 
-            return Ok("Update Product");
+            return updateproduct;
         }
 
-        //[HttpDelete("DeleteProduct")]
-        //public async Task<Responce<System.Collections.Generic.IEnumerable<UpdateProductDto>>> DeleteProduct(int productid)
-        //{
-        //    var deleteproduct = await productService.DeleteProductAsync(productid);
+        [HttpDelete("DeleteProduct")]
+        public async Task<Responce<IEnumerable<CreateProductDto>>> DeleteProduct(int productid)
+        {
+            var deleteproduct = await productService.DeleteProductAsync(productid);
 
-        //    return deleteproduct;
-        //}
+            return deleteproduct;
+        }
     }
 }

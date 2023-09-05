@@ -29,6 +29,7 @@ public class ProductService : IProductService
     public async Task<Responce<ResultProductDto>> GetProductByIdAsync(int id)
     {
         var getProductById = _unitOfWork.ProductRepository.Get(x=>x.ProductId==id);
+        var productDtos = _mapper.Map<IEnumerable<ResultProductDto>>(getProductById);
 
         if (getProductById == null)
         {
@@ -76,6 +77,7 @@ public class ProductService : IProductService
     public async Task<Responce<IEnumerable<UpdateProductDto>>> UpdateProductAsync(int id, Product productid)
     {
         var existingProduct = _unitOfWork.ProductRepository.Get(x => x.ProductId == id);
+        var productDtos = _mapper.Map<IEnumerable<UpdateProductDto>>(existingProduct);
 
         if (existingProduct == null)
         {
@@ -102,39 +104,40 @@ public class ProductService : IProductService
         };
     }
 
-    public async Task<Responce<bool>> DeleteProductAsync(int productid)
+    public async Task<Responce<IEnumerable<CreateProductDto>>> DeleteProductAsync(int productid)
     {
         try
         {
             var deleteproduct = _unitOfWork.ProductRepository.Get(x => x.ProductId == productid);
+            var productDtos = _mapper.Map<IEnumerable<CreateProductDto>>(deleteproduct);
 
             if (deleteproduct == null)
             {
-                return new Responce<bool>
+                return new Responce<IEnumerable<CreateProductDto>>
                 {
                     StatusCode = 404,
                     Message = "Product not found",
-                    Data = false
+                    Data = null
                 };
             }
 
             _unitOfWork.ProductRepository.Remove(deleteproduct);
             await _unitOfWork.CommitAsync();
 
-            return new Responce<bool>
+            return new Responce<IEnumerable<CreateProductDto>>
             {
                 StatusCode = 200,
                 Message = "Product deleted successfully",
-                Data = true
+                Data = null
             };
         }
         catch (Exception ex)
         {
-            return new Responce<bool>
+            return new Responce<IEnumerable<CreateProductDto>>
             {
                 StatusCode = 500,
                 Message = $"An error occurred while deleting the product: {ex.Message}",
-                Data = false
+                Data = null
             };
         }
     } // done

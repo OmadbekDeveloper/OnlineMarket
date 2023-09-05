@@ -1,4 +1,4 @@
-﻿global using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿global using AutoMapper;
 global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.AspNetCore.Identity;
 global using Microsoft.AspNetCore.Mvc;
@@ -10,15 +10,21 @@ global using Newtonsoft.Json;
 global using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 global using OnlineMarket.Data;
 global using OnlineMarket.Enums;
+global using OnlineMarket.Helper;
 global using OnlineMarket.Interfaces.Models;
 global using OnlineMarket.Interfaces.Person;
+global using OnlineMarket.Interfaces.Repasitories;
+global using OnlineMarket.Interfaces.UnitOfWork;
 global using OnlineMarket.Models.Authentication;
 global using OnlineMarket.Models.Dtos;
+global using OnlineMarket.Models.Dtos.Product;
 global using OnlineMarket.Models.Models;
 global using OnlineMarket.Models.Other;
+global using OnlineMarket.Repasitories;
 global using System.ComponentModel.DataAnnotations;
 global using System.ComponentModel.DataAnnotations.Schema;
 global using System.IdentityModel.Tokens.Jwt;
-global using System.Net;
+global using System.Linq.Expressions;
 global using System.Security.Claims;
 global using System.Text;
+

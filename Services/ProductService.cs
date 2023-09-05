@@ -1,27 +1,58 @@
 ﻿
-using Microsoft.EntityFrameworkCore;
-using OnlineMarket.Models.Models;
+using OnlineMarket.Helper;
 
 public class ProductService : IProductService
 {
-    private readonly OnlineMarketDB _context;
+    private readonly IMapper _mapper;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public ProductService(OnlineMarketDB context)
+    public ProductService(IUnitOfWork unitOfWork, IMapper mapper)
     {
-        _context = context;
+        _unitOfWork = unitOfWork;
+        _mapper = mapper;
     }
 
-    public async Task<List<Product>> GetProductsAsync()
-    {
-        return await _context.Products.ToListAsync();
+    public async Task<Responce<IEnumerable<ResultProductDto>>> GetProductsAsync()
+    {       
+        var getAllProducts = _unitOfWork.ProductRepository.GetAll();
+        var productDtos = _mapper.Map<IEnumerable<ResultProductDto>>(getAllProducts);
+
+        return new Responce<IEnumerable<ResultProductDto>>
+        {
+            StatusCode = 200,
+            Message = "Barcha mahsulotlar olindi",
+            Data = productDtos
+        };
+
+
     } // done
 
-    public async Task<Product> GetProductByIdAsync(int id)
+    public async Task<Responce<ResultProductDto>> GetProductByIdAsync(int id)
     {
-        return await _context.Products.FindAsync(id);
+        var getProductById = _unitOfWork.ProductRepository.Get(x=>x.ProductId==id);
+
+        if (getProductById == null)
+        {
+            return new Responce<ResultProductDto>
+            {
+                StatusCode = 404,
+                Message = "Product not found",
+                Data = null
+            };
+        }
+
+        var productDto = _mapper.Map<ResultProductDto>(getProductById);
+
+        return new Responce<ResultProductDto>
+        {
+            StatusCode = 200,
+            Message = "Mahsulot topildi",
+            Data = productDto
+        };
+
     } // done
 
-    public async Task CreateProductAsync(ProductDto productdto)
+    public async Task<Responce<IEnumerable<CreateProductDto>>> CreateProductAsync(CreateProductDto productdto)
     {
         var productcreate = new Product()
         {
@@ -32,73 +63,80 @@ public class ProductService : IProductService
             StockQuantity = productdto.StockQuantity,
         };
 
-        await _context.Products.AddAsync(productcreate);
-        await _context.SaveChangesAsync();
+        _unitOfWork.ProductRepository.Add(productcreate);
+        await _unitOfWork.CommitAsync();
+
+        return new Responce<IEnumerable<CreateProductDto>>
+        {
+            StatusCode = 200,
+            Message = "Mahsulot muvaffaqiyatli yaratildi",
+            Data = null
+        };
     } // done
 
-    //public async Task UpdateProductAsync(ProductDto updateProductDto, int id, Product productid)
-    //{
-    //    //try
-    //    //{
-    //    //    var productupdate = await _context.Products.FindAsync(id, productid.ProductId);
-
-    //    //    if (productupdate == null)
-    //    //    {
-    //    //        throw new Exception("Payment not found.");
-    //    //    }
-
-    //    //    productupdate = new Product()
-    //    //    {
-    //    //        ProductId = updateProductDto.ProductId,
-    //    //        Name = updateProductDto.Name,
-    //    //        Description = updateProductDto.Description,
-    //    //        Price = updateProductDto.Price,
-    //    //        StockQuantity = updateProductDto.StockQuantity,
-    //    //    };
-
-    //    //    _context.Products.Update(productupdate);
-    //    //    await _context.SaveChangesAsync();
-    //    //}
-    //    //catch (Exception ex)
-    //    //{
-    //    //    Console.WriteLine("Error product update");
-    //    //}
-
-    //}
-
-    public async Task<bool> UpdateProductAsync(int id, Product productid)
+    public async Task<Responce<IEnumerable<UpdateProductDto>>> UpdateProductAsync(int id, Product productid)
     {
-        var existingProduct = await _context.Products.FindAsync(productid);
+        var existingProduct = _unitOfWork.ProductRepository.Get(x => x.ProductId == id);
 
         if (existingProduct == null)
         {
-            throw new Exception("Product not found.");
-            return false;
+            return new Responce<IEnumerable<UpdateProductDto>>
+            {
+                StatusCode = 404,
+                Message = "Product not found",
+                Data = null
+            };
         }
 
-        // Update the properties of the existing product with the new values
         existingProduct.Name = productid.Name;
         existingProduct.Description = productid.Description;
         existingProduct.Price = productid.Price;
         existingProduct.StockQuantity = productid.StockQuantity;
 
-        await _context.SaveChangesAsync();
+        await _unitOfWork.CommitAsync();
 
-        return true;
+        return new Responce<IEnumerable<UpdateProductDto>>
+        {
+            StatusCode = 200,
+            Message = "Mahsulot yangilandi",
+            Data = null
+        };
     }
 
-    public async Task<bool> DeleteProductAsync(int id, Product productid)
+    public async Task<Responce<bool>> DeleteProductAsync(int productid)
     {
-        var order = await _context.Products.FindAsync(id);
-
-        if (order == null)
+        try
         {
-            throw new Exception("Order not found.");
-            return false;
-        }
+            var deleteproduct = _unitOfWork.ProductRepository.Get(x => x.ProductId == productid);
 
-        _context.Products.Remove(order);
-        await _context.SaveChangesAsync();
-        return true;
+            if (deleteproduct == null)
+            {
+                return new Responce<bool>
+                {
+                    StatusCode = 404,
+                    Message = "Product not found",
+                    Data = false
+                };
+            }
+
+            _unitOfWork.ProductRepository.Remove(deleteproduct);
+            await _unitOfWork.CommitAsync();
+
+            return new Responce<bool>
+            {
+                StatusCode = 200,
+                Message = "Product deleted successfully",
+                Data = true
+            };
+        }
+        catch (Exception ex)
+        {
+            return new Responce<bool>
+            {
+                StatusCode = 500,
+                Message = $"An error occurred while deleting the product: {ex.Message}",
+                Data = false
+            };
+        }
     }
 }

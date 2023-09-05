@@ -1,5 +1,4 @@
-﻿
-public class CartService : ICartService
+﻿public class CartService : ICartService
 {
     private readonly OnlineMarketDB _context;
 

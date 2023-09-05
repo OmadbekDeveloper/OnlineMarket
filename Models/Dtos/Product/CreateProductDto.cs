@@ -1,6 +1,6 @@
-﻿namespace OnlineMarket.Models.Dtos
+﻿namespace OnlineMarket.Models.Dtos.Product
 {
-    public class ProductDto
+    public class CreateProductDto
     {
         public int ProductId { get; set; }
         public string Name { get; set; }

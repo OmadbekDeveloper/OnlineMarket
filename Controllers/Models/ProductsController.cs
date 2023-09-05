@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Cors.Infrastructure;
+using OnlineMarket.Helper;
 using OnlineMarket.Interfaces.Models;
-using OnlineMarket.Models.Dtos;
+using OnlineMarket.Models.Dtos.Product;
 using OnlineMarket.Models.Models;
 
 namespace OnlineMarket.Controllers.Models
@@ -37,9 +38,9 @@ namespace OnlineMarket.Controllers.Models
         } // done
 
         [HttpPost("CreateProduct")]
-        public async Task<IActionResult> CreateProduct(ProductDto productdto)
+        public async Task<IActionResult> CreateProduct(CreateProductDto productdto)
         {
-            await productService.CreateProductAsync (productdto);
+            await productService.CreateProductAsync(productdto);
 
             return Ok("Created");
         } // done
@@ -47,21 +48,19 @@ namespace OnlineMarket.Controllers.Models
         [HttpPut("UpdateProduct")]
         public async Task<IActionResult> UpdateProduct(int id, Product productid)
         {
-            var updateproduct = productService.UpdateProductAsync( id, productid);
+            var updateproduct = productService.UpdateProductAsync(id, productid);
             if (updateproduct == null)
                 return NotFound();
 
             return Ok("Update Product");
         }
 
-        [HttpDelete("DeleteProduct")]
-        public async Task<IActionResult> DeleteProduct(int id, Product productid)
-        {
-            var deleteproduct = productService.DeleteProductAsync(id, productid);
-            if (deleteproduct == null)
-                return NotFound();
+        //[HttpDelete("DeleteProduct")]
+        //public async Task<Responce<System.Collections.Generic.IEnumerable<UpdateProductDto>>> DeleteProduct(int productid)
+        //{
+        //    var deleteproduct = await productService.DeleteProductAsync(productid);
 
-            return Ok(deleteproduct);
-        }
+        //    return deleteproduct;
+        //}
     }
 }

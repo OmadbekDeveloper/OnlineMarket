@@ -8,8 +8,8 @@ namespace OnlineMarket.Interfaces.Models
         public Task<Responce<IEnumerable<ResultProductDto>>> GetProductsAsync();
         Task<Responce<ResultProductDto>> GetProductByIdAsync(int id);
         Task<Responce<IEnumerable<CreateProductDto>>> CreateProductAsync(CreateProductDto productdto);
-        Task<Responce<IEnumerable<UpdateProductDto>>> UpdateProductAsync( int id, Product productid);
-        Task<Responce<IEnumerable<CreateProductDto>>> DeleteProductAsync(int productid);
+        Task<Responce<IEnumerable<ResultProductDto>>> UpdateProductAsync(UpdateProductDto productid);
+        Task<Responce<bool>> DeleteProductAsync(int productid);
 
     }
 }

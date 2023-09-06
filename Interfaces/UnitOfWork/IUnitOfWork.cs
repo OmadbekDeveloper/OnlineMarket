@@ -4,7 +4,7 @@ namespace OnlineMarket.Interfaces.UnitOfWork
     public interface IUnitOfWork
     {
         IProductRepository ProductRepository { get; }
-        ICartReposiitory CartReposiitory { get;  }
+        ICartRepository CartRepository { get; }
         ICartItemRepository CartItemRepository { get; }
         ICategoryRepository CategoryRepository { get; }
         ICustomerRepository CustomerRepository { get;  }
@@ -17,9 +17,7 @@ namespace OnlineMarket.Interfaces.UnitOfWork
         IProductCategoryRepository ProductCategoryRepository { get; }
         IReviewRepository ReviewRepository { get; }
         IShippingInfoRepository ShippingInfoRepository { get; }
-        void Commit();
-        void Rollback();
-        Task CommitAsync();
-        Task RollbackAsync();
+        Task<int> SaveAsync();
+
     }
 }

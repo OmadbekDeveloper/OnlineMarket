@@ -26,7 +26,7 @@ namespace OnlineMarket.Controllers.Models
             var getproduct = await productService.GetProductByIdAsync(id);
 
             return getproduct;
-        } // done
+        }
 
         [HttpPost("CreateProduct")]
         public async Task<Responce<IEnumerable<CreateProductDto>>> CreateProduct(CreateProductDto productdto)
@@ -37,15 +37,15 @@ namespace OnlineMarket.Controllers.Models
         } // done
 
         [HttpPut("UpdateProduct")]
-        public async Task<Responce<IEnumerable<UpdateProductDto>>> UpdateProduct(int id, Product productid)
+        public async Task<Responce<IEnumerable<ResultProductDto>>> UpdateProduct(UpdateProductDto productid)
         {
-            var updateproduct = await productService.UpdateProductAsync(id, productid);
+            var updateproduct = await productService.UpdateProductAsync(productid);
 
             return updateproduct;
         }
 
         [HttpDelete("DeleteProduct")]
-        public async Task<Responce<IEnumerable<CreateProductDto>>> DeleteProduct(int productid)
+        public async Task<Responce<bool>> DeleteProduct(int productid)
         {
             var deleteproduct = await productService.DeleteProductAsync(productid);
 

@@ -2,7 +2,7 @@
 
 namespace OnlineMarket.Interfaces.Repasitories.Services
 {
-    public interface ICartReposiitory : IGenericRepository<Cart>
+    public interface ICartRepository : IGenericRepository<Cart>
     {
 
     }

@@ -1,119 +1,32 @@
 ﻿
+using OnlineMarket.Helper;
+using OnlineMarket.UnitOfWork;
 
 public class ProductService : IProductService
 {
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
 
-    public ProductService(IUnitOfWork unitOfWork, IMapper mapper)
+    public ProductService(OnlineMarketDB dbcontext)
     {
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
+        this._unitOfWork = new UnitOfWork(dbcontext);
+
+        this._mapper = new Mapper(new MapperConfiguration(
+                cfg => cfg.AddProfile<MapperProfile>()
+            ));
     }
 
     public async Task<Responce<IEnumerable<ResultProductDto>>> GetProductsAsync()
-    {       
-        var getAllProducts = _unitOfWork.ProductRepository.GetAll();
-        var productDtos = _mapper.Map<IEnumerable<ResultProductDto>>(getAllProducts);
-
-        return new Responce<IEnumerable<ResultProductDto>>
-        {
-            StatusCode = 200,
-            Message = "Barcha mahsulotlar olindi",
-            Data = productDtos
-        };
-
-
-    } // done
-
-    public async Task<Responce<ResultProductDto>> GetProductByIdAsync(int id)
-    {
-        var getProductById = _unitOfWork.ProductRepository.Get(x=>x.ProductId==id);
-        var productDtos = _mapper.Map<IEnumerable<ResultProductDto>>(getProductById);
-
-        if (getProductById == null)
-        {
-            return new Responce<ResultProductDto>
-            {
-                StatusCode = 404,
-                Message = "Product not found",
-                Data = null
-            };
-        }
-
-        var productDto = _mapper.Map<ResultProductDto>(getProductById);
-
-        return new Responce<ResultProductDto>
-        {
-            StatusCode = 200,
-            Message = "Mahsulot topildi",
-            Data = productDto
-        };
-
-    } // done
-
-    public async Task<Responce<IEnumerable<CreateProductDto>>> CreateProductAsync(CreateProductDto productdto)
-    {
-        var productcreate = new Product()
-        {
-            ProductId = productdto.ProductId,
-            Name = productdto.Name,
-            Description = productdto.Description,
-            Price = productdto.Price,
-            StockQuantity = productdto.StockQuantity,
-        };
-
-        _unitOfWork.ProductRepository.Add(productcreate);
-        await _unitOfWork.CommitAsync();
-
-        return new Responce<IEnumerable<CreateProductDto>>
-        {
-            StatusCode = 200,
-            Message = "Mahsulot muvaffaqiyatli yaratildi",
-            Data = null
-        };
-    } // done
-
-    public async Task<Responce<IEnumerable<UpdateProductDto>>> UpdateProductAsync(int id, Product productid)
-    {
-        var existingProduct = _unitOfWork.ProductRepository.Get(x => x.ProductId == id);
-        var productDtos = _mapper.Map<IEnumerable<UpdateProductDto>>(existingProduct);
-
-        if (existingProduct == null)
-        {
-            return new Responce<IEnumerable<UpdateProductDto>>
-            {
-                StatusCode = 404,
-                Message = "Product not found",
-                Data = null
-            };
-        }
-
-        existingProduct.Name = productid.Name;
-        existingProduct.Description = productid.Description;
-        existingProduct.Price = productid.Price;
-        existingProduct.StockQuantity = productid.StockQuantity;
-
-        await _unitOfWork.CommitAsync();
-
-        return new Responce<IEnumerable<UpdateProductDto>>
-        {
-            StatusCode = 200,
-            Message = "Mahsulot yangilandi",
-            Data = null
-        };
-    }
-
-    public async Task<Responce<IEnumerable<CreateProductDto>>> DeleteProductAsync(int productid)
     {
         try
         {
-            var deleteproduct = _unitOfWork.ProductRepository.Get(x => x.ProductId == productid);
-            var productDtos = _mapper.Map<IEnumerable<CreateProductDto>>(deleteproduct);
 
-            if (deleteproduct == null)
+            var getAllProducts = _unitOfWork.ProductRepository.GetAll();
+            var productDtos = _mapper.Map<IEnumerable<ResultProductDto>>(getAllProducts);
+
+            if (getAllProducts == null)
             {
-                return new Responce<IEnumerable<CreateProductDto>>
+                return new Responce<IEnumerable<ResultProductDto>>
                 {
                     StatusCode = 404,
                     Message = "Product not found",
@@ -121,13 +34,81 @@ public class ProductService : IProductService
                 };
             }
 
-            _unitOfWork.ProductRepository.Remove(deleteproduct);
-            await _unitOfWork.CommitAsync();
+            return new Responce<IEnumerable<ResultProductDto>>
+            {
+                StatusCode = 200,
+                Message = "All products received",
+                Data = productDtos
+            };
+        }
+        catch (Exception ex)
+        {
+            return new Responce<IEnumerable<ResultProductDto>>
+            {
+                StatusCode = 500,
+                Message = "Error",
+                Data = null
+            };
+        }
+    } // done
+
+    public async Task<Responce<ResultProductDto>> GetProductByIdAsync(int id)
+    {
+        try
+        {
+            var getProductById = _unitOfWork.ProductRepository.Get(x => x.ProductId == id);
+            var productDtos = _mapper.Map<ResultProductDto>(getProductById);
+
+            if (getProductById == null)
+            {
+                return new Responce<ResultProductDto>
+                {
+                    StatusCode = 404,
+                    Message = "Product not found",
+                    Data = null
+                };
+            }
+
+            return new Responce<ResultProductDto>
+            {
+                StatusCode = 200,
+                Message = "All products received",
+                Data = productDtos
+            };
+        }
+        catch (Exception ex)
+        {
+            return new Responce<ResultProductDto>
+            {
+                StatusCode = 500,
+                Message = "Error",
+                Data = null
+            };
+        }
+
+    } // done
+
+    public async Task<Responce<IEnumerable<CreateProductDto>>> CreateProductAsync(CreateProductDto productdto)
+    {
+        try
+        {
+
+            var productcreate = new Product()
+            {
+                ProductId = productdto.ProductId,
+                Name = productdto.Name,
+                Description = productdto.Description,
+                Price = productdto.Price,
+                StockQuantity = productdto.StockQuantity,
+            };
+
+            await _unitOfWork.ProductRepository.CreateAsync(productcreate);
+            await _unitOfWork.SaveAsync();
 
             return new Responce<IEnumerable<CreateProductDto>>
             {
                 StatusCode = 200,
-                Message = "Product deleted successfully",
+                Message = "Product created successfully",
                 Data = null
             };
         }
@@ -136,8 +117,85 @@ public class ProductService : IProductService
             return new Responce<IEnumerable<CreateProductDto>>
             {
                 StatusCode = 500,
-                Message = $"An error occurred while deleting the product: {ex.Message}",
+                Message= "Error",
                 Data = null
+            };
+        }
+    } // done
+
+    public async Task<Responce<IEnumerable<ResultProductDto>>> UpdateProductAsync( UpdateProductDto productid)
+    {
+        try
+        {
+
+            var existingProduct = _unitOfWork.ProductRepository.Get(x => x.ProductId == productid.Id);
+
+            if (existingProduct == null)
+            {
+                return new Responce<IEnumerable<ResultProductDto>>
+                {
+                    StatusCode = 404,
+                    Message = "Product not found",
+                };
+            }
+
+            var map = _mapper.Map(productid, existingProduct);
+
+            _unitOfWork.ProductRepository.Update(map);
+            await _unitOfWork.ProductRepository.SaveAsync();
+
+            return new Responce<IEnumerable<ResultProductDto>>
+            {
+                StatusCode = 200,
+                Message = "Mahsulot yangilandi",
+                Data = null
+            };
+        }
+        catch (Exception ex)
+        {
+            return new Responce<IEnumerable<ResultProductDto>>
+            {
+                StatusCode = 500,
+                Message = "Error",
+                Data = null
+            };
+        }
+    }
+
+    public async Task<Responce<bool>> DeleteProductAsync(int productid)
+    {
+        try
+        {
+            var deleteproduct = _unitOfWork.ProductRepository.Get(x => x.ProductId == productid);
+            var productDtos = _mapper.Map<CreateProductDto>(deleteproduct);
+
+            if (deleteproduct == null)
+            {
+                return new Responce<bool>
+                {
+                    StatusCode = 404,
+                    Message = "Product not found",
+                    Data = false
+                };
+            }
+
+            _unitOfWork.ProductRepository.Remove(deleteproduct);
+            await _unitOfWork.ProductRepository.SaveAsync();
+
+            return new Responce<bool>
+            {
+                StatusCode = 200,
+                Message = "Product deleted successfully",
+                Data = true
+            };
+        }
+        catch (Exception ex)
+        {
+            return new Responce<bool>
+            {
+                StatusCode = 500,
+                Message = "Error",
+                Data = false
             };
         }
     } // done

@@ -1,4 +1,8 @@
-﻿namespace OnlineMarket.Repositories.Generic
+﻿using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+
+namespace OnlineMarket.Repositories.Generic
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
@@ -13,8 +17,23 @@
         }
 
 
+        public async Task<T> CreateAsync(T entity)
+        {
+            var temp = (await _entitiySet.AddAsync(entity)).Entity;
+            return temp;
+        }
+
+        public T Update(T entity)
+            => _entitiySet.Update(entity).Entity;
+
+        public async Task<int> SaveAsync()
+           => await _dbContext.SaveChangesAsync();
+
+
+
+
         public void Add(T entity)
-            => _dbContext.Add(entity);
+           => _dbContext.Add(entity);
 
 
         public async Task AddAsync(T entity, CancellationToken cancellationToken = default)
@@ -32,10 +51,6 @@
         public T Get(Expression<Func<T, bool>> expression)
             => _entitiySet.FirstOrDefault(expression);
 
-        public T Get(Expression<Func<T, int, bool>> expression)
-        {
-            throw new NotImplementedException();
-        }
 
         public IEnumerable<T> GetAll()
             => _entitiySet.AsEnumerable();
@@ -44,10 +59,6 @@
         public IEnumerable<T> GetAll(Expression<Func<T, bool>> expression)
             => _entitiySet.Where(expression).AsEnumerable();
 
-        public IEnumerable<T> GetAll(Expression<Func<T>> expression)
-        {
-            throw new NotImplementedException();
-        }
 
         public async Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken = default)
             => await _entitiySet.ToListAsync(cancellationToken);
@@ -68,12 +79,18 @@
         public void RemoveRange(IEnumerable<T> entities)
             => _dbContext.RemoveRange(entities);
 
+        IEnumerable<T> IGenericRepository<T>.GetAll(Expression<Func<T>> expression)
+        {
+            throw new NotImplementedException();
+        }
 
-        public void Update(T entity)
-            => _dbContext.Update(entity);
+
+        //public void Update(T entity)
+        //    => _dbContext.Update(entity);
 
 
-        public void UpdateRange(IEnumerable<T> entities)
-            => _dbContext.UpdateRange(entities);
+        //public void UpdateRange(IEnumerable<T> entities)
+        //    => _dbContext.UpdateRange(entities);
     }
 }
+

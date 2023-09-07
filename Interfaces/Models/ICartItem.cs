@@ -5,10 +5,10 @@ namespace OnlineMarket.Interfaces.Models
 {
     public interface ICartItemService
     {
-        Task<List<CartItem>> GetCartItemsByCartIdAsync();
-        Task<CartItem> GetCartItemByIdAsync(int id);
-        Task AddCartItemAsync(CreateCartItemDto cartItemdto);
-        Task<bool> UpdateCartItemAsync(int id, CartItem updatedCartItem);
-        Task<bool> RemoveCartItemAsync(int id);
+        Task<Responce<IEnumerable<ResultCartItemDto>>> GetCartItemAllAsync();
+        Task<Responce<ResultCartItemDto>> GetCartItemByIdAsync(int id);
+        Task<Responce<ResultCartItemDto>> AddCartItemAsync(CreateCartItemDto cartItemdto);
+        Task<Responce<ResultCartItemDto>> UpdateCartItemAsync(UpdateCartItemDto updateCartItemDto);
+        Task<Responce<bool>> RemoveCartItemAsync(int id);
     }
 }

@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
+﻿
 
 namespace OnlineMarket.Repositories.Generic
 {
@@ -70,6 +68,7 @@ namespace OnlineMarket.Repositories.Generic
 
         public async Task<T> GetAsync(Expression<Func<T, bool>> expression, CancellationToken cancellationToken = default)
             => await _entitiySet.FirstOrDefaultAsync(expression, cancellationToken);
+
 
 
         public void Remove(T entity)

@@ -36,7 +36,7 @@ global using OnlineMarket.Models.Models;
 global using OnlineMarket.Models.Other;
 global using OnlineMarket.Repositories.Generic;
 global using OnlineMarket.Repositories.Service;
-//global using OnlineMarket.UnitOfWorks;
+global using OnlineMarket.UnitOfWorks;
 global using System.ComponentModel.DataAnnotations;
 global using System.ComponentModel.DataAnnotations.Schema;
 global using System.IdentityModel.Tokens.Jwt;

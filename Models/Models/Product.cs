@@ -16,5 +16,6 @@ namespace OnlineMarket.Models.Models
 
         public ICollection<OrderItem> OrderItems { get; set; }
         public ICollection<ProductCategory> ProductCategories { get; set; }
+        public ICollection<CartItem> CartItems { get; set; }
     }
 }

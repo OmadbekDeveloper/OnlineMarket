@@ -1,10 +1,8 @@
-
-
 using OnlineMarket.Interfaces.Models;
 using OnlineMarket.Models.Dtos.Customer;
 using OnlineMarket.Models.Models;
 
-namespace OnlineMarket.Controllers
+namespace OnlineMarket.Controllers.Models
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -14,7 +12,7 @@ namespace OnlineMarket.Controllers
 
         public CustomersController(ICustomerService customerservice)
         {
-            this.customerService = customerservice;
+            customerService = customerservice;
         }
 
         [HttpGet("GetAllCustomers")]

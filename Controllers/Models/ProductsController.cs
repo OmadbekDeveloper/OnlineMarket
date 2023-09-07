@@ -29,7 +29,7 @@ namespace OnlineMarket.Controllers.Models
         }
 
         [HttpPost("CreateProduct")]
-        public async Task<Responce<IEnumerable<CreateProductDto>>> CreateProduct(CreateProductDto productdto)
+        public async Task<Responce<ResultProductDto>> CreateProduct( CreateProductDto productdto)
         {
             var createproduct = await productService.CreateProductAsync(productdto);
 

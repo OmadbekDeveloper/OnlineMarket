@@ -1,4 +1,5 @@
 ﻿
+
 namespace OnlineMarket.Interfaces.UnitOfWork
 {
     public interface IUnitOfWork

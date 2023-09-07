@@ -1,6 +1,6 @@
 ﻿
-using OnlineMarket.Helper;
-using OnlineMarket.UnitOfWork;
+using AutoMapper;
+using OnlineMarket.UnitOfWorks;
 
 public class ProductService : IProductService
 {
@@ -21,8 +21,7 @@ public class ProductService : IProductService
         try
         {
 
-            var getAllProducts = _unitOfWork.ProductRepository.GetAll();
-            var productDtos = _mapper.Map<IEnumerable<ResultProductDto>>(getAllProducts);
+            var getAllProducts = await _unitOfWork.ProductRepository.GetAllAsync();
 
             if (getAllProducts == null)
             {
@@ -34,11 +33,13 @@ public class ProductService : IProductService
                 };
             }
 
+            var mapper = _mapper.Map<IEnumerable<ResultProductDto>>(getAllProducts);
+
             return new Responce<IEnumerable<ResultProductDto>>
             {
                 StatusCode = 200,
                 Message = "All products received",
-                Data = productDtos
+                Data = mapper
             };
         }
         catch (Exception ex)
@@ -57,7 +58,7 @@ public class ProductService : IProductService
         try
         {
             var getProductById = _unitOfWork.ProductRepository.Get(x => x.ProductId == id);
-            var productDtos = _mapper.Map<ResultProductDto>(getProductById);
+            
 
             if (getProductById == null)
             {
@@ -65,9 +66,10 @@ public class ProductService : IProductService
                 {
                     StatusCode = 404,
                     Message = "Product not found",
-                    Data = null
                 };
             }
+
+            var productDtos = _mapper.Map<ResultProductDto>(getProductById);
 
             return new Responce<ResultProductDto>
             {
@@ -88,11 +90,11 @@ public class ProductService : IProductService
 
     } // done
 
-    public async Task<Responce<IEnumerable<CreateProductDto>>> CreateProductAsync(CreateProductDto productdto)
+    public async Task<Responce<ResultProductDto>> CreateProductAsync(CreateProductDto productdto)
     {
+
         try
         {
-
             var productcreate = new Product()
             {
                 ProductId = productdto.ProductId,
@@ -102,22 +104,43 @@ public class ProductService : IProductService
                 StockQuantity = productdto.StockQuantity,
             };
 
-            await _unitOfWork.ProductRepository.CreateAsync(productcreate);
+            _unitOfWork.ProductRepository.Add(productcreate);
             await _unitOfWork.SaveAsync();
 
-            return new Responce<IEnumerable<CreateProductDto>>
+            return new Responce<ResultProductDto>
             {
                 StatusCode = 200,
-                Message = "Product created successfully",
+                Message = "Mahsulot muvaffaqiyatli yaratildi",
                 Data = null
             };
+            //var productcreate = _unitOfWork.ProductRepository.GetByNameAsync(productdto.Name);
+
+            //if(productcreate == null)
+            //{
+            //    return new Responce<ResultProductDto>
+            //    {
+            //        StatusCode = 403,
+            //        Message = "This Product is already",
+            //    };
+            //}
+
+            //var mapper = _mapper.Map<Product>(productdto);
+
+            //await _unitOfWork.ProductRepository.CreateAsync(mapper);
+
+            //return new Responce<ResultProductDto>
+            //{
+            //    StatusCode = 200,
+            //    Message = "Product created successfully",
+            //    Data = null
+            //};
         }
         catch (Exception ex)
         {
-            return new Responce<IEnumerable<CreateProductDto>>
+            return new Responce<ResultProductDto>
             {
                 StatusCode = 500,
-                Message= "Error",
+                Message = "Error",
                 Data = null
             };
         }
@@ -167,7 +190,6 @@ public class ProductService : IProductService
         try
         {
             var deleteproduct = _unitOfWork.ProductRepository.Get(x => x.ProductId == productid);
-            var productDtos = _mapper.Map<CreateProductDto>(deleteproduct);
 
             if (deleteproduct == null)
             {

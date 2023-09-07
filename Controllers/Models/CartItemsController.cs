@@ -1,7 +1,5 @@
 ﻿// Done
-using OnlineMarket.Interfaces.Models;
-using OnlineMarket.Models.Dtos.CartItem;
-using OnlineMarket.Models.Models;
+
 
 namespace OnlineMarket.Controllers.Models
 {
@@ -17,53 +15,45 @@ namespace OnlineMarket.Controllers.Models
         }
 
         [HttpGet("GetCartItemsByCartId")]
-        public async Task<IActionResult> GetCartItemsByCartId()
+        public async Task<Responce<IEnumerable<ResultCartItemDto>>> GetCartItemsByCartId()
         {
-            var cartitem = await cartItemService.GetCartItemsByCartIdAsync();
-            if (cartitem == null)
-                return NotFound();
+            var cartitem = await cartItemService.GetCartItemAllAsync();
 
-            return Ok(cartitem);
+            return cartitem;
         } // done
 
         [HttpGet("GetCartItemById")]
-        public async Task<IActionResult> GetCartItemById(int id)
+        public async Task<Responce<ResultCartItemDto>> GetCartItemById(int id)
         {
             var getcartItemid = await cartItemService.GetCartItemByIdAsync(id);
-            if (getcartItemid == null)
-                return NotFound();
 
-            return Ok(getcartItemid);
+            return getcartItemid;
         } // done
 
         [HttpPost("AddCartItem")]
 
-        public async Task<IActionResult> AddCartItem([FromForm] CreateCartItemDto cartitemdto)
+        public async Task<Responce<ResultCartItemDto>> AddCartItem(CreateCartItemDto cartitemdto)
         {
-            await cartItemService.AddCartItemAsync(cartitemdto);
+           var createcartitem =  await cartItemService.AddCartItemAsync(cartitemdto);
 
-            return Ok("Created");
+            return createcartitem;
         } // done
         
 
         [HttpPut("UpdateCartItem")]
-        public async Task<IActionResult> UpdateCartItem(int id, CartItem updatedCartItem)
+        public async Task<Responce<ResultCartItemDto>> UpdateCartItem(UpdateCartItemDto updateCartItemDto)
         {
-            var updatecartitem = cartItemService.UpdateCartItemAsync(id, updatedCartItem);
-            if (updatecartitem == null)
-                return NotFound();
+            var updatecartitem = await cartItemService.UpdateCartItemAsync(updateCartItemDto);         
 
-            return Ok(updatecartitem);
+            return updatecartitem;
         }
 
         [HttpDelete("RemoveCartItem")]
-        public async Task<IActionResult> RemoveCartItem(int id)
+        public async Task<Responce<bool>> RemoveCartItem(int id)
         {
-            var deletecartitem = cartItemService.RemoveCartItemAsync(id);
-            if (deletecartitem == null)
-                return NotFound();
+            var deletecartitem = await cartItemService.RemoveCartItemAsync(id);
 
-            return Ok(deletecartitem);
+            return deletecartitem;
         }
     }
 }

@@ -1,69 +1,206 @@
-﻿
-using OnlineMarket.Models.Dtos.CartItem;
-
-public class CartItemService : ICartItemService
+﻿public class CartItemService : ICartItemService
 {
-    private readonly OnlineMarketDB _context;
+    private readonly IMapper _mapper;
+    private readonly IUnitOfWork _unitOfWork;
 
     public CartItemService(OnlineMarketDB context)
     {
-        _context = context;
+        this._unitOfWork = new UnitOfWork(context);
+
+        this._mapper = new Mapper(new MapperConfiguration(
+                cfg => cfg.AddProfile<MapperProfile>()
+            ));
     }
 
-    public async Task<List<CartItem>> GetCartItemsByCartIdAsync()
+    public async Task<Responce<IEnumerable<ResultCartItemDto>>> GetCartItemAllAsync()
     {
-        return await _context.CartItems.ToListAsync();
-    } // done
-
-    public async Task<CartItem> GetCartItemByIdAsync(int id)
-    {
-        return await _context.CartItems.FindAsync(id);
-    } // done
-
-    public async Task AddCartItemAsync(CreateCartItemDto cartItemdto)
-    {
-        var cartitemrcreate = new CartItem()
+        try
         {
-            CartItemId = cartItemdto.CartItemId,
-            CartId = cartItemdto.CartId,
-            ProductId = cartItemdto.ProductId,
-            Quantity = cartItemdto.Quantity,
-        };
 
-        await _context.CartItems.AddAsync(cartitemrcreate);
-        await _context.SaveChangesAsync();
-    } // done
+            var getAllCartItems = await _unitOfWork.CartItemRepository.GetAllAsync();
 
-    public async Task<bool> UpdateCartItemAsync(int id, CartItem updatedCartItem)
-    {
-        var cartItem = await _context.CartItems.FindAsync(id);
+            if (getAllCartItems == null)
+            {
+                return new Responce<IEnumerable<ResultCartItemDto>>
+                {
+                    StatusCode = 404,
+                    Message = "Product not found",
+                    Data = null
+                };
+            }
 
-        if (cartItem == null)
+            var mapper = _mapper.Map<IEnumerable<ResultCartItemDto>>(getAllCartItems);
+
+            return new Responce<IEnumerable<ResultCartItemDto>>
+            {
+                StatusCode = 200,
+                Message = "All products received",
+                Data = mapper
+            };
+        }
+        catch (Exception ex)
         {
-            throw new Exception("Cart item not found.");
-            return false;
+            return new Responce<IEnumerable<ResultCartItemDto>>
+            {
+                StatusCode = 500,
+                Message = "Error",
+                Data = null
+            };
+
+
         }
 
-        cartItem.Quantity = cartItem.Quantity;
+    } // done
 
-        _context.CartItems.Update(cartItem);
-        await _context.SaveChangesAsync();
-        return true;
+    public async Task<Responce<ResultCartItemDto>> GetCartItemByIdAsync(int id)
+    {
+        try
+        {
+            var getCartItemById = _unitOfWork.CartItemRepository.Get(x => x.CartItemId == id);
+
+
+            if (getCartItemById == null)
+            {
+                return new Responce<ResultCartItemDto>
+                {
+                    StatusCode = 404,
+                    Message = "Product not found",
+                };
+            }
+
+            var cartitemDtos = _mapper.Map<ResultCartItemDto>(getCartItemById);
+
+            return new Responce<ResultCartItemDto>
+            {
+                StatusCode = 200,
+                Message = "All products received",
+                Data = cartitemDtos
+            };
+        }
+        catch (Exception ex)
+        {
+            return new Responce<ResultCartItemDto>
+            {
+                StatusCode = 500,
+                Message = "Error",
+                Data = null
+            };
+        }
+    } // done
+
+    public async Task<Responce<ResultCartItemDto>> AddCartItemAsync(CreateCartItemDto cartItemdto)
+    {
+        try
+        {
+            var cartitemtcreate = new CartItem()
+            {
+                CartItemId = cartItemdto.CartItemId,
+                CartId = cartItemdto.CartId,
+                ProductId = cartItemdto.ProductId,
+                Quantity = cartItemdto.Quantity,
+
+            };
+
+            await _unitOfWork.CartItemRepository.AddAsync(cartitemtcreate);
+            await _unitOfWork.SaveAsync();
+
+            return new Responce<ResultCartItemDto>
+            {
+                StatusCode = 200,
+                Message = "Mahsulot muvaffaqiyatli yaratildi",
+                Data = null
+            };
+        }
+        catch (Exception ex)
+        {
+            return new Responce<ResultCartItemDto>
+            {
+                StatusCode=400,
+                Message = "Bad Request",
+            };
+            return new Responce<ResultCartItemDto>
+            {
+                StatusCode = 500,
+                Message = "Error",
+                Data = null
+            };
+        }
+
+    } // done
+
+    public async Task<Responce<ResultCartItemDto>> UpdateCartItemAsync(UpdateCartItemDto cartitem)
+    {
+        try
+        {
+            var updatecart = _unitOfWork.CartItemRepository.Get(x => x.CartItemId == cartitem.CartItemId);
+
+            if (updatecart == null)
+            {
+                return new Responce<ResultCartItemDto>
+                {
+                    StatusCode = 404,
+                    Message = "Product not found",
+                };
+            }
+
+            var mapper = _mapper.Map(cartitem, updatecart);
+
+            _unitOfWork.CartItemRepository.Update(mapper);
+            await _unitOfWork.CartItemRepository.SaveAsync();
+
+            return new Responce<ResultCartItemDto>
+            {
+                StatusCode = 200,
+                Message = "Mahsulot yangilandi",
+                Data = null
+            };
+        }
+        catch (Exception ex)
+        {
+            return new Responce<ResultCartItemDto>
+            {
+                StatusCode = 500,
+                Message = "Error",
+                Data = null
+            };
+        }
     }
 
 
-    public async Task<bool> RemoveCartItemAsync(int id)
+    public async Task<Responce<bool>> RemoveCartItemAsync(int id)
     {
-        var cartItem = await _context.CartItems.FindAsync(id);
-
-        if (cartItem == null)
+        try
         {
-            throw new Exception("Cart item not found.");
-            return false;
-        }
+            var deletecartitem = _unitOfWork.CartItemRepository.Get(x => x.CartItemId == id);
 
-        _context.CartItems.Remove(cartItem);
-        await _context.SaveChangesAsync();
-        return true;
+            if (deletecartitem == null)
+            {
+                return new Responce<bool>
+                {
+                    StatusCode = 404,
+                    Message = "Product not found",
+                    Data = false
+                };
+            }
+
+            _unitOfWork.CartItemRepository.Remove(deletecartitem);
+            await _unitOfWork.CartItemRepository.SaveAsync();
+
+            return new Responce<bool>
+            {
+                StatusCode = 200,
+                Message = "Product deleted successfully",
+                Data = true
+            };
+        }
+        catch (Exception ex)
+        {
+            return new Responce<bool>
+            {
+                StatusCode = 500,
+                Message = "Error",
+                Data = false
+            };
+        }
     }
 }

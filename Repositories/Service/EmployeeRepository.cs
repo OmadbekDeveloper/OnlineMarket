@@ -1,4 +1,5 @@
-﻿namespace OnlineMarket.Repositories.Service
+﻿
+namespace OnlineMarket.Repositories.Service
 {
     public class EmployeeRepository : GenericRepository<Employee>, IEmployeeRepository
     {

@@ -17,61 +17,35 @@ namespace OnlineMarket.Controllers.Models
         }
 
         [HttpGet("GetAllCarts")]
-        public async Task<IActionResult> GetAllCarts()
+        public async Task<Responce<IEnumerable<UniversalCartDto>>> GetAllCarts()
         {
             var getcarts = await cartService.GetAllCartsAsync();
-            if(getcarts == null)
-                return NotFound();
 
-            return Ok(getcarts);
+            return getcarts;
         } // done
 
         [HttpGet("GetCart")]
-        public async Task<IActionResult> GetCart(int id)
+        public async Task<Responce<UniversalCartDto>> GetCart(int id)
         {
             var getcart = await cartService.GetCartByIdAsync(id);
-            if (getcart == null)
-                return NotFound();
 
-            return Ok(getcart);
+            return getcart;
         } // done
 
         [HttpPost("CreateCart")]
-        public async Task<IActionResult> CreateCart(UniversalCartDto createCartDto)
+        public async Task<Responce<UniversalCartDto>> CreateCart(UniversalCartDto createCartDto)
         {
-            await cartService.CreateCartAsync(createCartDto);
+            var createcart = await cartService.CreateCartAsync(createCartDto);
 
-            return Ok("Created");
+            return createcart;
         } // done
 
-        [HttpPut("UpdateCart")]
-        public async Task<IActionResult> UpdateCart(int id, Cart updatedCart)
-        {
-            var updatecart = cartService.UpdateCartAsync(id, updatedCart);
-            if (updatecart == null)
-                return NotFound();
-
-            return Ok(updatecart);
-        }
-
         [HttpDelete("DeleteCart")]
-        public async Task<IActionResult> DeleteCart(int id)
+        public async Task<Responce<bool>> DeleteCart(int id)
         {
-            var deletecart = cartService.DeleteCartAsync(id);
-            if (deletecart == null)
-                return NotFound();
+            var deletecart = await cartService.DeleteCartAsync(id);
 
-            return Ok(deletecart);
-        }
-
-        [HttpGet("CalculateCartTotal")]
-        public async Task<IActionResult> CalculateCartTotal(int id)
-        {
-            var calculatecart = cartService.CalculateCartTotalAsync(id);
-            if (calculatecart == null)
-                return NotFound();
-
-            return Ok(calculatecart);
+            return deletecart;
         }
     }
 }

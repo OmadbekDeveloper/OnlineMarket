@@ -13,7 +13,6 @@ namespace OnlineMarket
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            //builder.Services.AddTransient<IMapper, Mapper>();
             builder.Services.AddTransient<ICartService, CartService>();
             builder.Services.AddTransient<ICartItemService, CartItemService>();
             builder.Services.AddTransient<ICategoryService, CategoryService>();
@@ -29,6 +28,7 @@ namespace OnlineMarket
             builder.Services.AddTransient<IReviewService, ReviewService>();
             builder.Services.AddTransient<IShippingInfoService, ShippingInfoService>();
 
+            //builder.Services.AddTransient<IMapper, Mapper>();
             //builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 
 

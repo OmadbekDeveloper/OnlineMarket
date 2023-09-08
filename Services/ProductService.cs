@@ -105,7 +105,7 @@ public class ProductService : IProductService
             };
 
             _unitOfWork.ProductRepository.Add(productcreate);
-            await _unitOfWork.SaveAsync();
+            await _unitOfWork.ProductRepository.SaveAsync();
 
             return new Responce<ResultProductDto>
             {
@@ -113,27 +113,6 @@ public class ProductService : IProductService
                 Message = "Mahsulot muvaffaqiyatli yaratildi",
                 Data = null
             };
-            //var productcreate = _unitOfWork.ProductRepository.GetByNameAsync(productdto.Name);
-
-            //if(productcreate == null)
-            //{
-            //    return new Responce<ResultProductDto>
-            //    {
-            //        StatusCode = 403,
-            //        Message = "This Product is already",
-            //    };
-            //}
-
-            //var mapper = _mapper.Map<Product>(productdto);
-
-            //await _unitOfWork.ProductRepository.CreateAsync(mapper);
-
-            //return new Responce<ResultProductDto>
-            //{
-            //    StatusCode = 200,
-            //    Message = "Product created successfully",
-            //    Data = null
-            //};
         }
         catch (Exception ex)
         {

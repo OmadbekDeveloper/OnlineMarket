@@ -5,11 +5,11 @@ namespace OnlineMarket.Interfaces.Models
 {
     public interface ICategoryService
     {
-        Task<List<Category>> GetAllCategoriesAsync();
-        Task<Category> GetCategoryByIdAsync(int id);
-        Task CreateCategoryAsync(CreateCategoryDto categorydto);
-        Task<bool> UpdateCategoryAsync(int id, Category updatedCategory);
-        Task<bool> DeleteCategoryAsync(int id);
+        Task<Responce<IEnumerable<ResultCategoryDto>>> GetAllCategoriesAsync();
+        Task<Responce<ResultCategoryDto>> GetCategoryByIdAsync(int id);
+        Task<Responce<ResultCategoryDto>> CreateCategoryAsync(CreateCategoryDto categorydto);
+        Task<Responce<IEnumerable<ResultCategoryDto>>> UpdateCategoryAsync(UpdateCategoryDto updatedCategory);
+        Task<Responce<bool>> DeleteCategoryAsync(int id);
         // Add more methods as needed
     }
 }

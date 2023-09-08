@@ -16,32 +16,44 @@ namespace OnlineMarket.Controllers.Models
         }
 
         [HttpGet("GetAllCustomers")]
-        public async Task<IActionResult> GetAllCustomers()
+        public async Task<Responce<IEnumerable<ResultCustomerDto>>> GetAllCustomers()
         {
             var customers = await customerService.GetAllCustomersAsync();
-            if (customers == null)
-                return NotFound();
 
-            return Ok(customers);
+            return customers;
         } // done
 
         [HttpGet("GetCustomerId")]
-        public async Task<IActionResult> GetCustomerId(int id)
+        public async Task<Responce<ResultCustomerDto>> GetCustomerId(int id)
         {
             var customer = await customerService.GetCustomerByIdAsync(id);
-            if (customer == null)
-                return NotFound();
 
-            return Ok(customer);
+            return customer;
         } // done
 
         [HttpPost("CreateCustomer")]
-        public async Task<IActionResult> CreateCustomer([FromForm] CreateCustomerDto customerDto)
+        public async Task<Responce<ResultCustomerDto>> CreateCustomer(CreateCustomerDto customerDto)
         {
-            await customerService.CreateCustomerAsync(customerDto);
+            var createcustomer = await customerService.CreateCustomerAsync(customerDto);
 
-            return Ok("Created");
+            return createcustomer;
         } // done
+
+        [HttpPut("UpdateCustomer")]
+        public async Task<Responce<IEnumerable<ResultCustomerDto>>> UpdateCustomer(UpdateCustomerDto customerDto)
+        {
+            var updatecustomer = await customerService.UpdateCustomerAsync(customerDto);
+
+            return updatecustomer;
+        }
+
+        [HttpDelete("DeleteCustomer")]
+        public async Task<Responce<bool>> DeleteCustomer(int id)
+        {
+            var deletecustomer = await customerService.DeleteCustomerAsync(id);
+
+            return deletecustomer;
+        }
 
     }
 }

@@ -1,75 +1,201 @@
 ﻿// DONE
 using Microsoft.EntityFrameworkCore;
 using OnlineMarket.Models.Dtos.Customer;
+using OnlineMarket.Models.Models;
 
 public class CustomerService : ICustomerService
 {
-    private readonly OnlineMarketDB _context;
+    private readonly IMapper _mapper;
+    private readonly IUnitOfWork _unitOfWork;
 
     public CustomerService(OnlineMarketDB context)
     {
-        _context = context;
+        this._unitOfWork = new UnitOfWork(context);
+
+        this._mapper = new Mapper(new MapperConfiguration(
+                cfg => cfg.AddProfile<MapperProfile>()
+            ));
     }
 
-    public async Task<List<Customer>> GetAllCustomersAsync()
+    public async Task<Responce<IEnumerable<ResultCustomerDto>>> GetAllCustomersAsync()
     {
-        return await _context.Customers.ToListAsync();
-    } // done
-
-    public async Task<Customer> GetCustomerByIdAsync(int id)
-    {
-        return await _context.Customers.FindAsync(id);
-    } // done
-
-    public async Task CreateCustomerAsync(CreateCustomerDto customerdto)
-    {
-        var customercreate = new Customer()
+        try
         {
-            CustomerId = customerdto.CustomerId,
-            FirstName = customerdto.FirstName,
-            LastName = customerdto.LastName,
-            Email = customerdto.Email,
-            Phone = customerdto.Phone,
-            Address = customerdto.Address,
-        };
+            var getAllCustomers = await _unitOfWork.CustomerRepository.GetAllAsync();
 
-        await _context.Customers.AddAsync(customercreate);
-        await _context.SaveChangesAsync();
-    } // done
+            if (getAllCustomers == null)
+            {
+                return new Responce<IEnumerable<ResultCustomerDto>>
+                {
+                    StatusCode = 404,
+                    Message = "Product not found",
+                    Data = null
+                };
+            }
 
-    public async Task<bool> UpdateCustomerAsync(int id, Customer updatedCustomer)
-    {
-        var customer = await _context.Customers.FindAsync(id);
+            var mapper = _mapper.Map<IEnumerable<ResultCustomerDto>>(getAllCustomers);
 
-        if (customer == null)
-        {
-            throw new Exception("Customer not found.");
-            return false;
+            return new Responce<IEnumerable<ResultCustomerDto>>
+            {
+                StatusCode = 200,
+                Message = "All products received",
+                Data = mapper
+            };
         }
+        catch (Exception ex)
+        {
+            return new Responce<IEnumerable<ResultCustomerDto>>
+            {
+                StatusCode = 500,
+                Message = "Error",
+                Data = null
+            };
+        }
+    } // done
 
-        customer.FirstName = updatedCustomer.FirstName;
-        customer.LastName = updatedCustomer.LastName;
-        customer.Email = updatedCustomer.Email;
-        customer.Phone = updatedCustomer.Phone;
-        customer.Address = updatedCustomer.Address;
+    public async Task<Responce<ResultCustomerDto>> GetCustomerByIdAsync(int id)
+    {
+        try
+        {
+            var getCustomerById = _unitOfWork.CustomerRepository.Get(x => x.CustomerId == id);
 
-        _context.Customers.Update(customer);
-        await _context.SaveChangesAsync();
-        return true;
+
+            if (getCustomerById == null)
+            {
+                return new Responce<ResultCustomerDto>
+                {
+                    StatusCode = 404,
+                    Message = "Product not found",
+                };
+            }
+
+            var map = _mapper.Map<ResultCustomerDto>(getCustomerById);
+
+            return new Responce<ResultCustomerDto>
+            {
+                StatusCode = 200,
+                Message = "All products received",
+                Data = map
+            };
+        }
+        catch (Exception ex)
+        {
+            return new Responce<ResultCustomerDto>
+            {
+                StatusCode = 500,
+                Message = "Error",
+                Data = null
+            };
+        }
+    } // done
+
+    public async Task<Responce<ResultCustomerDto>> CreateCustomerAsync(CreateCustomerDto customerdto)
+    {
+        try
+        {
+            var customercreate = new Customer()
+            {
+                CustomerId = customerdto.CustomerId,
+                FirstName = customerdto.FirstName,
+                LastName = customerdto.LastName,
+                Email = customerdto.Email,
+                Phone = customerdto.Phone,
+                Address = customerdto.Address,
+            };
+
+            _unitOfWork.CustomerRepository.Add(customercreate);
+            await _unitOfWork.CustomerRepository.SaveAsync();
+
+            return new Responce<ResultCustomerDto>
+            {
+                StatusCode = 200,
+                Message = "Mahsulot muvaffaqiyatli yaratildi",
+                Data = null
+            };
+        }
+        catch(Exception ex)
+        {
+            return new Responce<ResultCustomerDto>
+            {
+                StatusCode = 500,
+                Message = "Error",
+                Data = null
+            };
+        }
+    } // done
+
+    public async Task<Responce<IEnumerable<ResultCustomerDto>>> UpdateCustomerAsync(UpdateCustomerDto updatedCustomer)
+    {
+        try
+        {
+            var existingCustomer = _unitOfWork.CustomerRepository.Get(x => x.CustomerId == updatedCustomer.CustomerId);
+
+            if (existingCustomer == null)
+            {
+                return new Responce<IEnumerable<ResultCustomerDto>>
+                {
+                    StatusCode = 404,
+                    Message = "Product not found",
+                };
+            }
+
+            var map = _mapper.Map(updatedCustomer, existingCustomer);
+
+            _unitOfWork.CustomerRepository.Update(map);
+            await _unitOfWork.CustomerRepository.SaveAsync();
+
+            return new Responce<IEnumerable<ResultCustomerDto>>
+            {
+                StatusCode = 200,
+                Message = "Mahsulot yangilandi",
+                Data = null
+            };
+        }
+        catch(Exception ex)
+        {
+            return new Responce<IEnumerable<ResultCustomerDto>>
+            {
+                StatusCode = 500,
+                Message = "Error",
+                Data = null
+            };
+        }
     }
 
-    public async Task<bool> DeleteCustomerAsync(int id)
+    public async Task<Responce<bool>> DeleteCustomerAsync(int id)
     {
-        var customer = await _context.Customers.FindAsync(id);
-
-        if (customer == null)
+        try
         {
-            throw new Exception("Customer not found.");
-            return false;
-        }
+            var deletecustomer = _unitOfWork.CustomerRepository.Get(x => x.CustomerId == id);
 
-        _context.Customers.Remove(customer);
-        await _context.SaveChangesAsync();
-        return true;
+            if (deletecustomer == null)
+            {
+                return new Responce<bool>
+                {
+                    StatusCode = 404,
+                    Message = "Product not found",
+                    Data = false
+                };
+            }
+
+            _unitOfWork.CustomerRepository.Remove(deletecustomer);
+            await _unitOfWork.ProductRepository.SaveAsync();
+
+            return new Responce<bool>
+            {
+                StatusCode = 200,
+                Message = "Product deleted successfully",
+                Data = true
+            };
+        }
+        catch (Exception ex)
+        {
+            return new Responce<bool>
+            {
+                StatusCode = 500,
+                Message = "Error",
+                Data = false
+            };
+        }
     }
 }

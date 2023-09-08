@@ -7,5 +7,10 @@ namespace OnlineMarket.Repositories.Service
         {
 
         }
+
+        public async Task<Cart> GetByIdAsync(int id)
+        {
+            return await _dbContext.Carts.FirstOrDefaultAsync(p => p.CartId == id);
+        }
     }
 }

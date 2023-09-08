@@ -1,8 +1,4 @@
-﻿// DONE
-using OnlineMarket.Interfaces.Models;
-using OnlineMarket.Models.Dtos.Category;
-using OnlineMarket.Models.Models;
-
+﻿
 namespace OnlineMarket.Controllers.Models
 {
     [Route("api/[controller]")]
@@ -17,53 +13,43 @@ namespace OnlineMarket.Controllers.Models
         }
 
         [HttpGet("GetAllCategories")]
-        public async Task<IActionResult> GetAllCategories()
+        public async Task<Responce<IEnumerable<ResultCategoryDto>>> GetAllCategories()
         {
             var customers = await categoryService.GetAllCategoriesAsync();
-            if (customers == null)
-                return NotFound();
 
-            return Ok(customers);
+            return customers;
         } // done
 
         [HttpGet("GetCategoryById")]
-        public async Task<IActionResult> GetCategoryById(int id)
+        public async Task<Responce<ResultCategoryDto>> GetCategoryById(int id)
         {
             var getcategory = await categoryService.GetCategoryByIdAsync(id);
-            if (getcategory == null)
-                return NotFound();
 
-            return Ok(getcategory);
+            return getcategory;
         } // done
 
         [HttpPost("CreateCategory")]
-        public async Task<IActionResult> CreateCategory(CreateCategoryDto categorydto)
+        public async Task<Responce<ResultCategoryDto>> CreateCategory(CreateCategoryDto categorydto)
         {
-            await categoryService.CreateCategoryAsync(categorydto);
-            if(categorydto == null)
-                return NotFound();
+            var createcategory = await categoryService.CreateCategoryAsync(categorydto);
 
-            return Ok("Created");
+            return createcategory;
         } // done
 
         [HttpPut("UpdateCategory")]
-        public async Task<IActionResult> UpdateCategory(int id, Category updatedCategory)
+        public async Task<Responce<IEnumerable<ResultCategoryDto>>> UpdateCategory(UpdateCategoryDto updatedCategory)
         {
-            var updatecategory = categoryService.UpdateCategoryAsync(id, updatedCategory);
-            if (updatecategory == null)
-                return NotFound();
+            var updatecategory = await categoryService.UpdateCategoryAsync(updatedCategory);
 
-            return Ok(updatecategory);
+            return updatecategory;
         }
 
         [HttpDelete("DeleteCategory")]
-        public async Task<IActionResult> DeleteCategory(int id)
+        public async Task<Responce<bool>> DeleteCategory(int id)
         {
-            var deletecategory = categoryService.DeleteCategoryAsync(id);
-            if (deletecategory == null)
-                return NotFound();
+            var deletecategory = await categoryService.DeleteCategoryAsync(id);
 
-            return Ok(deletecategory);
+            return deletecategory;
         }
     }
 }

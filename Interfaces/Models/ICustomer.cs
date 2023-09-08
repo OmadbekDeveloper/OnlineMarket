@@ -5,10 +5,10 @@ namespace OnlineMarket.Interfaces.Models
 {
     public interface ICustomerService
     {
-        Task<List<Customer>> GetAllCustomersAsync();
-        Task<Customer> GetCustomerByIdAsync(int id);
-        Task CreateCustomerAsync(CreateCustomerDto customerdto);
-        Task<bool> UpdateCustomerAsync(int id, Customer updatedCustomer);
-        Task<bool> DeleteCustomerAsync(int id);
+        Task<Responce<IEnumerable<ResultCustomerDto>>> GetAllCustomersAsync();
+        Task<Responce<ResultCustomerDto>> GetCustomerByIdAsync(int id);
+        Task<Responce<ResultCustomerDto>> CreateCustomerAsync(CreateCustomerDto customerdto);
+        Task<Responce<IEnumerable<ResultCustomerDto>>> UpdateCustomerAsync(UpdateCustomerDto updatedCustomer);
+        Task<Responce<bool>> DeleteCustomerAsync(int id);
     }
 }

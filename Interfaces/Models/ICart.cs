@@ -6,11 +6,9 @@ namespace OnlineMarket.Interfaces.Models
 {
     public interface ICartService
     {
-        Task<List<Cart>> GetAllCartsAsync();
-        Task<Cart> GetCartByIdAsync(int id);
-        Task CreateCartAsync(UniversalCartDto cartdto);
-        Task<bool> UpdateCartAsync(int id, Cart updatedCart);
-        Task<bool> DeleteCartAsync(int id);
-        Task<decimal> CalculateCartTotalAsync(int id);
+        Task<Responce<IEnumerable<UniversalCartDto>>> GetAllCartsAsync();
+        Task<Responce<UniversalCartDto>> GetCartByIdAsync(int id);
+        Task<Responce<UniversalCartDto>> CreateCartAsync(UniversalCartDto cartdto);
+        Task<Responce<bool>> DeleteCartAsync(int id);
     }
 }

@@ -6,6 +6,7 @@ namespace OnlineMarket.Models.Models
 {
     public class Product : IName
     {
+        [Key]
         public int ProductId { get; set; }
         [Required]
         public string Name { get; set; }

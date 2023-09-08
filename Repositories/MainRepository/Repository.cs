@@ -1,6 +1,7 @@
 ﻿using System;
+using OnlineMarket.Interfaces.IRepasitories.IMainRepository;
 
-namespace OnlineMarket.Data
+namespace OnlineMarket.Repositories.MainRepository
 {
     public class Repository<T> : IRepository<T> where T : Auditable
     {

@@ -4,6 +4,8 @@ namespace OnlineMarket.Models.User
 {
     public class UserProfileUpdateModel
     {
+        [Key]
+        public Guid Id { get; set; }
         [Required(ErrorMessage = "First name is required.")]
         public string FirstName { get; set; }
 

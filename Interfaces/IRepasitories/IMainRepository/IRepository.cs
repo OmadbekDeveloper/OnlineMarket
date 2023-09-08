@@ -1,7 +1,7 @@
 ﻿
 using System.Security.AccessControl;
 
-namespace OnlineMarket.Data
+namespace OnlineMarket.Interfaces.IRepasitories.IMainRepository
 {
     public interface IRepository<T> where T : Auditable
     {

@@ -27,7 +27,7 @@ public class ReviewService : IReviewService
         {
              ReviewId = createReviewDto.ReviewId,
              ProductId = createReviewDto.ProductId,
-             UserId = createReviewDto.UserId,
+             CustomerId = createReviewDto.CustomerId,
              ReviewText = createReviewDto.ReviewText,
              ReviewDate = createReviewDto.ReviewDate,
              Ratings = createReviewDto.Ratings,

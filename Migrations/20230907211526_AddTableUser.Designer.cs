@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using OnlineMarket.Data;
@@ -11,9 +12,11 @@ using OnlineMarket.Data;
 namespace OnlineMarket.Migrations
 {
     [DbContext(typeof(OnlineMarketDB))]
-    partial class OnlineMarketDBModelSnapshot : ModelSnapshot
+    [Migration("20230907211526_AddTableUser")]
+    partial class AddTableUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -392,9 +395,6 @@ namespace OnlineMarket.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ReviewId"));
 
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("ProductId")
                         .HasColumnType("integer");
 
@@ -411,9 +411,10 @@ namespace OnlineMarket.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("ReviewId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
 
-                    b.HasIndex("CustomerId");
+                    b.HasKey("ReviewId");
 
                     b.HasIndex("ProductId");
 
@@ -478,29 +479,6 @@ namespace OnlineMarket.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("ShoppingCartItems");
-                });
-
-            modelBuilder.Entity("OnlineMarket.Models.User.UserProfileUpdateModel", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("UserProfiles");
                 });
 
             modelBuilder.Entity("User", b =>
@@ -680,19 +658,11 @@ namespace OnlineMarket.Migrations
 
             modelBuilder.Entity("OnlineMarket.Models.Models.Review", b =>
                 {
-                    b.HasOne("OnlineMarket.Models.Models.Customer", "Customer")
-                        .WithMany("Reviews")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("OnlineMarket.Models.Models.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Customer");
 
                     b.Navigation("Product");
                 });
@@ -751,8 +721,6 @@ namespace OnlineMarket.Migrations
             modelBuilder.Entity("OnlineMarket.Models.Models.Customer", b =>
                 {
                     b.Navigation("Orders");
-
-                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("OnlineMarket.Models.Models.Discount", b =>

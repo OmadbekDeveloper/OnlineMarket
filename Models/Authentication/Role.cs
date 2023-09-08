@@ -2,6 +2,6 @@
 {
     public class Role : IdentityRole
     {
-        // Additional properties, if needed
+        public string RoleName { get; set; }
     }
 }

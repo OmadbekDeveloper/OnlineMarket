@@ -1,15 +1,14 @@
 ﻿
-using OnlineMarket.Models.Authentication;
+//using OnlineMarket.Models.Authentication;
 
-public class User : IdentityUser, IPerson
-{
-    [Key]
-    public int Id { get; set; }
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public string Address { get; set; }
 
-    [ForeignKey(nameof(RoleName))]
-    public Role Role { get; set; }
-    public string RoleName { get; set; }
-}
+//public class User
+//{
+//    public string Username { get; set; }
+//    public string Password { get; set; }
+//}
+
+//public static class UserDataStore
+//{
+//    public static List<User> Users { get; } = new List<User>();
+//}

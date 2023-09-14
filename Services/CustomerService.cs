@@ -98,6 +98,7 @@ public class CustomerService : ICustomerService
                 CustomerId = customerdto.CustomerId,
                 FirstName = customerdto.FirstName,
                 LastName = customerdto.LastName,
+                Password = customerdto.Password,
                 Email = customerdto.Email,
                 Phone = customerdto.Phone,
                 Address = customerdto.Address,

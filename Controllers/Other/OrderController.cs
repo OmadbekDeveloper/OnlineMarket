@@ -7,9 +7,9 @@ namespace OnlineMarket.Controllers.Other
     public class OrderController : ControllerBase
     {
         private readonly OnlineMarketDB _dbContext;
-        private readonly UserManager<User> _userManager;
+        private readonly UserManager<Customer> _userManager;
 
-        public OrderController(OnlineMarketDB dbContext, UserManager<User> userManager)
+        public OrderController(OnlineMarketDB dbContext, UserManager<Customer> userManager)
         {
             _dbContext = dbContext;
             _userManager = userManager;

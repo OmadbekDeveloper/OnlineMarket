@@ -23,7 +23,7 @@ namespace OnlineMarket.Data
         public DbSet<ShippingInfo> ShippingInfos { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<ShoppingCartItem> ShoppingCartItems { get; set;}
-        public DbSet<User> Users { get; set; }
+        //public DbSet<User> Users { get; set; }
         public DbSet<UserProfileUpdateModel> UserProfiles { get; set; }
 
     }

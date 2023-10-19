@@ -16,6 +16,7 @@ namespace OnlineMarket.Models.Models
 
         public ICollection<Order> Orders { get; set; }
         public ICollection<Review> Reviews { get; set; }
+        public ICollection<Notification> Notifications { get; set; }
     }
 
     public static class CustomerDataStore

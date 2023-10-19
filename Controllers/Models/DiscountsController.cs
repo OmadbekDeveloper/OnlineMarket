@@ -1,4 +1,5 @@
-﻿using OnlineMarket.Models.Dtos.Discount;
+﻿using OnlineMarket.Interfaces.Models;
+using OnlineMarket.Models.Dtos.Discount;
 using OnlineMarket.Models.Models;
 
 namespace OnlineMarket.Controllers.Models
@@ -15,33 +16,44 @@ namespace OnlineMarket.Controllers.Models
         }
 
         [HttpGet("GetDiscounts")]
-        public async Task<IActionResult> GetDiscounts()
+        public async Task<Responce<IEnumerable<ResultDiscountDto>>> GetAllDiscounts()
         {
             var discounts = await discountService.GetAllDiscountsAsync();
-            if (discounts == null)
-                return NotFound();
 
-            return Ok(discounts);
+            return discounts;
         } // done
 
         [HttpGet("GetDiscount")]
-        public async Task<IActionResult> GetDiscount(int id)
+        public async Task<Responce<ResultDiscountDto>> GetDiscountId(int id)
         {
             var discount = await discountService.GetDiscountByIdAsync(id);
-            if (discount == null)
-                return NotFound();
 
-            return Ok(discount);
+            return discount;
         } // done
 
         [HttpPost("CreateDiscount")]
 
-        public async Task<IActionResult> CreateDiscount(CreateDiscountDto discountdto)
+        public async Task<Responce<ResultDiscountDto>> CreateDiscoont(CreateDiscountDto discountDto)
         {
-            await discountService.CreateDiscountAsync(discountdto);
+            var creatediscount = await discountService.CreateDiscountAsync(discountDto);
 
-            return Ok("Created");
+            return creatediscount;
         } // done
 
+        [HttpPut("UpdateDiscount")]
+        public async Task<Responce<IEnumerable<ResultDiscountDto>>> UpdateDiscount(UpdateDiscountDto discountDto)
+        {
+            var updatediscounnt = await discountService.UpdateDiscountAsync(discountDto);
+
+            return updatediscounnt;
+        }
+
+        [HttpDelete("DeleteDiscount")]
+        public async Task<Responce<bool>> DeleteDiscount(int id)
+        {
+            var deletecustomer = await discountService.DeleteDiscountAsync(id);
+
+            return deletecustomer;
+        }
     }
 }

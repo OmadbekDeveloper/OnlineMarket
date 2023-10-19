@@ -4,10 +4,10 @@ namespace OnlineMarket.Interfaces.Models
 {
     public interface IDiscountService
     {
-        Task<List<Discount>> GetAllDiscountsAsync();
-        Task<Discount> GetDiscountByIdAsync(int id);
-        Task CreateDiscountAsync(CreateDiscountDto discountdto);
-        Task<bool> UpdateDiscountAsync(int id, Discount updatedDiscount);
-        Task<bool> DeleteDiscountAsync(int id);
+        Task<Responce<IEnumerable<ResultDiscountDto>>> GetAllDiscountsAsync();
+        Task<Responce<ResultDiscountDto>> GetDiscountByIdAsync(int id);
+        Task<Responce<ResultDiscountDto>> CreateDiscountAsync(CreateDiscountDto discountdto);
+        Task<Responce<IEnumerable<ResultDiscountDto>>> UpdateDiscountAsync(UpdateDiscountDto updatedto);
+        Task<Responce<bool>> DeleteDiscountAsync(int id);
     }
 }

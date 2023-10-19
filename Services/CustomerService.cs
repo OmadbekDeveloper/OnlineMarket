@@ -1,8 +1,4 @@
-﻿// DONE
-using Microsoft.EntityFrameworkCore;
-using OnlineMarket.Models.Dtos.Customer;
-using OnlineMarket.Models.Models;
-
+﻿
 public class CustomerService : ICustomerService
 {
     private readonly IMapper _mapper;
@@ -161,7 +157,7 @@ public class CustomerService : ICustomerService
                 Data = null
             };
         }
-    }
+    } // done
 
     public async Task<Responce<bool>> DeleteCustomerAsync(int id)
     {
@@ -180,7 +176,7 @@ public class CustomerService : ICustomerService
             }
 
             _unitOfWork.CustomerRepository.Remove(deletecustomer);
-            await _unitOfWork.ProductRepository.SaveAsync();
+            await _unitOfWork.CustomerRepository.SaveAsync();
 
             return new Responce<bool>
             {
@@ -198,5 +194,5 @@ public class CustomerService : ICustomerService
                 Data = false
             };
         }
-    }
+    } // done
 }

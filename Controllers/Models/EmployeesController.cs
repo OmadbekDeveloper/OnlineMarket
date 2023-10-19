@@ -1,4 +1,5 @@
-﻿using OnlineMarket.Models.Dtos.Employee;
+﻿using OnlineMarket.Interfaces.Models;
+using OnlineMarket.Models.Dtos.Employee;
 using OnlineMarket.Models.Models;
 
 namespace OnlineMarket.Controllers.Models
@@ -15,51 +16,43 @@ namespace OnlineMarket.Controllers.Models
         }
 
         [HttpGet("GetEmployees")]
-        public async Task<IActionResult> GetEmployees()
+        public async Task<Responce<IEnumerable<ResultEmployeeDto>>> GetEmployees()
         {
             var employees = await employeeService.GetAllEmployeesAsync();
-            if (employees == null)
-                return NotFound();
 
-            return Ok(employees);
+            return employees;
         } // done
 
         [HttpGet("GetEmployee")]
-        public async Task<IActionResult> GetEmployee(int id)
+        public async Task<Responce<ResultEmployeeDto>> GetEmployee(int id)
         {
             var employee = await employeeService.GetEmployeeByIdAsync(id);
-            if (employee == null)
-                return NotFound();
 
-            return Ok(employee);
+            return employee;
         } // done
 
         [HttpPost("CreateEmployee")]
-        public async Task<IActionResult> CreateEmployee(CreateEmployeeDto employeedto)
+        public async Task<Responce<ResultEmployeeDto>> CreateEmployee(CreateEmployeeDto employeedto)
         {
-            await employeeService.CreateEmployeeAsync(employeedto);
+            var employee = await employeeService.CreateEmployeeAsync(employeedto);
 
-            return Ok("Created");
+            return employee;
         } // done
 
         [HttpPut("UpdateEmployee")]
-        public async Task<IActionResult> UpdateEmployee(int id, Employee updatedEmployee)
+        public async Task<Responce<IEnumerable<ResultEmployeeDto>>> UpdateEmployee(UpdateEmployeeDto updatedto)
         {
-            var updateemployee = employeeService.UpdateEmployeeAsync(id, updatedEmployee);
-            if (updateemployee == null)
-                return NotFound();
+            var employee = await employeeService.UpdateEmployeeAsync(updatedto);
 
-            return Ok(updateemployee);
+            return employee;
         }
 
         [HttpDelete("DeleteEmployee")]
-        public async Task<IActionResult> DeleteEmployee(int id)
+        public async Task<Responce<bool>> DeleteEmployee(int id)
         {
-            var deleteemployee = employeeService.DeleteEmployeeAsync(id);
-            if (deleteemployee == null)
-                return NotFound();
+            var employee = await employeeService.DeleteEmployeeAsync(id);
 
-            return Ok(deleteemployee);
+            return employee;
         }
     }
 }

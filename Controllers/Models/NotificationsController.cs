@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using OnlineMarket.Models.Dtos.Notification;
-using OnlineMarket.Models.Models;
-
-namespace OnlineMarket.Controllers.Models
+﻿namespace OnlineMarket.Controllers.Models
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -16,31 +12,43 @@ namespace OnlineMarket.Controllers.Models
         }
 
         [HttpGet("GetNotifications")]
-        public async Task<IActionResult> GetNotifications()
+        public async Task<Responce<IEnumerable<ResultNotificationDto>>> GetNotifications()
         {
-            var notifications = await notificationService.GetAllNotificationsAsync();
-            if (notifications == null)
-                return NotFound();
+            var getall = await notificationService.GetAllNotificationsAsync();
 
-            return Ok(notifications);
+            return getall;
         } // done
 
         [HttpGet("GetNotification")]
-        public async Task<IActionResult> GetNotification(int id)
+        public async Task<Responce<ResultNotificationDto>> GetNotification(int id)
         {
-            var notification = await notificationService.GetNotificationByIdAsync(id);
-            if (notification == null)
-                return NotFound();
+            var get = await notificationService.GetNotificationByIdAsync(id);
 
-            return Ok(notification);
+            return get;
         } // done
 
         [HttpPost("CreateNotification")]
-        public async Task<IActionResult> CreateNotification(CreateNotificationDto notificationdto)
+        public async Task<Responce<ResultNotificationDto>> CreateNotification(CreateNotificationDto notificationdto)
         {
-            await notificationService.CreateNotificationAsync(notificationdto);
+            var create = await notificationService.CreateNotificationAsync(notificationdto);
 
-            return Ok("Created");
+            return create;
         } // done
+
+        [HttpPut("UpdateNotification")]
+        public async Task<Responce<IEnumerable<ResultNotificationDto>>> UpdateNotification(UpdateNotificationDto updatedto)
+        {
+            var update = await notificationService.UpdateNotificationAsync(updatedto);
+
+            return update;
+        }
+
+        [HttpDelete("DeleteNotification")]
+        public async Task<Responce<bool>> DeleteNotification(int id)
+        {
+            var delete = await notificationService.DeleteNotificationAsync(id);
+
+            return delete;
+        }
     }
 }

@@ -3,78 +3,200 @@ using OnlineMarket.Models.Dtos.Employee;
 
 public class EmployeeService : IEmployeeService
 {
-    private readonly OnlineMarketDB _context;
+    private readonly IMapper _mapper;
+    private readonly IUnitOfWork _unitOfWork;
 
     public EmployeeService(OnlineMarketDB context)
     {
-        _context = context;
+        this._unitOfWork = new UnitOfWork(context);
+
+        this._mapper = new Mapper(new MapperConfiguration(
+                cfg => cfg.AddProfile<MapperProfile>()
+            ));
     }
 
-    public async Task<List<Employee>> GetAllEmployeesAsync()
+    public async Task<Responce<IEnumerable<ResultEmployeeDto>>> GetAllEmployeesAsync()
     {
-        return await _context.Employees.ToListAsync();
-    } // done
-
-    public async Task<Employee> GetEmployeeByIdAsync(int id)
-    {
-        return await _context.Employees.FindAsync(id);
-    } // done
-
-    public async Task CreateEmployeeAsync(CreateEmployeeDto employeedto)
-    {
-        var employeecreate = new Employee()
+        try
         {
-            EmployeeId = employeedto.EmployeeId,
-            FirstName = employeedto.FirstName,
-            LastName = employeedto.LastName,
-            Email = employeedto.Email,
-            Phone = employeedto.Phone,
-            Address = employeedto.Address,
-            Role = employeedto.Role,
-            HireDate = employeedto.HireDate,
-            Salary = employeedto.Salary,
-        };
+            var getAllEmployee = await _unitOfWork.EmployeeRepository.GetAllAsync();
 
-        await _context.Employees.AddAsync(employeecreate);
-        await _context.SaveChangesAsync();
-    } // done
+            if (getAllEmployee == null)
+            {
+                return new Responce<IEnumerable<ResultEmployeeDto>>
+                {
+                    StatusCode = 404,
+                    Message = "Not found",
+                    Data = null
+                };
+            }
 
-    public async Task<bool> UpdateEmployeeAsync(int id, Employee updatedEmployee)
-    {
-        var existingEmployee = await _context.Employees.FindAsync(id);
+            var mapper = _mapper.Map<IEnumerable<ResultEmployeeDto>>(getAllEmployee);
 
-        if (existingEmployee == null)
-        {
-            throw new Exception("Employee not found.");
-            return false;
+            return new Responce<IEnumerable<ResultEmployeeDto>>
+            {
+                StatusCode = 200,
+                Message = "All products received",
+                Data = mapper
+            };
         }
+        catch (Exception ex)
+        {
+            return new Responce<IEnumerable<ResultEmployeeDto>>
+            {
+                StatusCode = 500,
+                Message = "Error",
+                Data = null
+            };
+        }
+    } // done
 
-        existingEmployee.FirstName = updatedEmployee.FirstName;
-        existingEmployee.LastName = updatedEmployee.LastName;
-        existingEmployee.Email = updatedEmployee.Email;
-        existingEmployee.Phone = updatedEmployee.Phone;
-        existingEmployee.Address = updatedEmployee.Address;
-        existingEmployee.Role = updatedEmployee.Role;
-        existingEmployee.HireDate = updatedEmployee.HireDate;
-        existingEmployee.Salary = updatedEmployee.Salary;
+    public async Task<Responce<ResultEmployeeDto>> GetEmployeeByIdAsync(int id)
+    {
+        try
+        {
+            var getEmployeeById = _unitOfWork.EmployeeRepository.Get(x => x.EmployeeId == id);
 
-            _context.Employees.Update(existingEmployee);
-        await _context.SaveChangesAsync();
-        return true;
+            if (getEmployeeById == null)
+            {
+                return new Responce<ResultEmployeeDto>
+                {
+                    StatusCode = 404,
+                    Message = "Not Found",
+
+                };
+            }
+
+            var map = _mapper.Map<ResultEmployeeDto>(getEmployeeById);
+
+            return new Responce<ResultEmployeeDto>
+            {
+                StatusCode = 200,
+                Message = "all taken out",
+                Data = map,
+            };
+        }
+        catch (Exception ex)
+        {
+            return new Responce<ResultEmployeeDto>
+            {
+                StatusCode = 500,
+                Message = "Error",
+                Data = null
+            };
+        }
+    } // done
+
+    public async Task<Responce<ResultEmployeeDto>> CreateEmployeeAsync(CreateEmployeeDto employeedto)
+    {
+        try
+        {
+            var emmployeecreate = new Employee()
+            {
+                EmployeeId = employeedto.EmployeeId,
+                FirstName = employeedto.FirstName,
+                LastName = employeedto.LastName,
+                Email = employeedto.Email,
+                Phone = employeedto.Phone,
+                Address = employeedto.Address,
+                Role = employeedto.Role,
+                HireDate = employeedto.HireDate,
+                Salary = employeedto.Salary,
+            };
+
+            _unitOfWork.EmployeeRepository.Add(emmployeecreate);
+            await _unitOfWork.EmployeeRepository.SaveAsync();
+
+            return new Responce<ResultEmployeeDto>
+            {
+                StatusCode = 200,
+                Message = "Mahsulot muvaffaqiyatli yaratildi",
+                Data = null
+            };
+        }
+        catch (Exception ex)
+        {
+            return new Responce<ResultEmployeeDto>
+            {
+                StatusCode = 500,
+                Message = "Error",
+                Data = null
+            };
+        }
+    } // done
+
+    public async Task<Responce<IEnumerable<ResultEmployeeDto>>> UpdateEmployeeAsync(UpdateEmployeeDto updatedto)
+    {
+        try
+        {
+            var existingEmployee = _unitOfWork.EmployeeRepository.Get(x => x.EmployeeId == updatedto.EmployeeId);
+
+            if (existingEmployee == null)
+            {
+                return new Responce<IEnumerable<ResultEmployeeDto>>
+                {
+                    StatusCode = 404,
+                    Message = "Product not found",
+                };
+            }
+
+            var map = _mapper.Map(updatedto, existingEmployee);
+
+            _unitOfWork.EmployeeRepository.Update(map);
+            await _unitOfWork.EmployeeRepository.SaveAsync();
+
+            return new Responce<IEnumerable<ResultEmployeeDto>>
+            {
+                StatusCode = 200,
+                Message = "Mahsulot yangilandi",
+                Data = null
+            };
+        }
+        catch (Exception ex)
+        {
+            return new Responce<IEnumerable<ResultEmployeeDto>>
+            {
+                StatusCode = 500,
+                Message = "Error",
+                Data = null
+            };
+        }
     }
 
-    public async Task<bool> DeleteEmployeeAsync(int id)
+    public async Task<Responce<bool>> DeleteEmployeeAsync(int id)
     {
-        var employee = await _context.Employees.FindAsync(id);
-
-        if (employee == null)
+        try
         {
-            throw new Exception("Employee not found.");
-            return false;
-        }
+            var deleteemployee = _unitOfWork.EmployeeRepository.Get(x => x.EmployeeId == id);
 
-        _context.Employees.Remove(employee);
-        await _context.SaveChangesAsync();
-        return true;
+            if (deleteemployee == null)
+            {
+                return new Responce<bool>
+                {
+                    StatusCode = 404,
+                    Message = "Product not found",
+                    Data = false
+                };
+            }
+
+            _unitOfWork.EmployeeRepository.Remove(deleteemployee);
+            await _unitOfWork.EmployeeRepository.SaveAsync();
+
+            return new Responce<bool>
+            {
+                StatusCode = 200,
+                Message = "Product deleted successfully",
+                Data = true
+            };
+        }
+        catch (Exception ex)
+        {
+            return new Responce<bool>
+            {
+                StatusCode = 500,
+                Message = "Error",
+                Data = false
+            };
+        }
     }
 }

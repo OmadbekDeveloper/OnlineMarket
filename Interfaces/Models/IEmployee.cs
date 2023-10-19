@@ -4,11 +4,11 @@ namespace OnlineMarket.Interfaces.Models
 {
     public interface IEmployeeService
     {
-        Task<List<Employee>> GetAllEmployeesAsync();
-        Task<Employee> GetEmployeeByIdAsync(int id);
-        Task CreateEmployeeAsync(CreateEmployeeDto employeedto);
-        Task<bool> UpdateEmployeeAsync(int id, Employee updatedEmployee);
-        Task<bool> DeleteEmployeeAsync(int id);
+        Task<Responce<IEnumerable<ResultEmployeeDto>>> GetAllEmployeesAsync();
+        Task<Responce<ResultEmployeeDto>> GetEmployeeByIdAsync(int id);
+        Task<Responce<ResultEmployeeDto>> CreateEmployeeAsync(CreateEmployeeDto employeedto);
+        Task<Responce<IEnumerable<ResultEmployeeDto>>> UpdateEmployeeAsync(UpdateEmployeeDto updatedto);
+        Task<Responce<bool>> DeleteEmployeeAsync(int id);
     }
 }
 

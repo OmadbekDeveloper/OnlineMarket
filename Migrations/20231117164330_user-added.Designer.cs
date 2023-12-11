@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using OnlineMarket.Data;
@@ -11,9 +12,11 @@ using OnlineMarket.Data;
 namespace OnlineMarket.Migrations
 {
     [DbContext(typeof(OnlineMarketDB))]
-    partial class OnlineMarketDBModelSnapshot : ModelSnapshot
+    [Migration("20231117164330_user-added")]
+    partial class useradded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

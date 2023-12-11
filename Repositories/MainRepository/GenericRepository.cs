@@ -83,6 +83,11 @@ namespace OnlineMarket.Repositories.Generic
             throw new NotImplementedException();
         }
 
+        Task<T> IGenericRepository<T>.FirstOrDefaultAsync(Expression<Func<T, bool>> expression, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
 
         //public void Update(T entity)
         //    => _dbContext.Update(entity);

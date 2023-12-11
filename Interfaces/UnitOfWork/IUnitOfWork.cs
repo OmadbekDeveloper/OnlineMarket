@@ -18,6 +18,7 @@ namespace OnlineMarket.Interfaces.UnitOfWork
         IProductCategoryRepository ProductCategoryRepository { get; }
         IReviewRepository ReviewRepository { get; }
         IShippingInfoRepository ShippingInfoRepository { get; }
+        IUserRepository UserRepository { get; }
         Task<int> SaveAsync();
 
     }

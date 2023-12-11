@@ -1,6 +1,6 @@
 ﻿namespace OnlineMarket.Interfaces.Person
 {
-    internal interface IPerson : IFirstName, ILastName
+    public interface IPerson : IFirstName, ILastName
     {
     }
 }

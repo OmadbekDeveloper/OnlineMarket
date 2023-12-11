@@ -23,6 +23,7 @@ namespace OnlineMarket.UnitOfWorks
             ProductCategoryRepository = new ProductCategoryRepository(dbContext);
             ReviewRepository = new ReviewRepository(dbContext);
             ShippingInfoRepository = new ShippingInfoRepository(dbContext);
+            UserRepository = new UserRepository(dbContext);
 
         }
 
@@ -40,6 +41,7 @@ namespace OnlineMarket.UnitOfWorks
         public IProductCategoryRepository ProductCategoryRepository { get; }
         public IReviewRepository ReviewRepository { get; }
         public IShippingInfoRepository ShippingInfoRepository { get; }
+        public IUserRepository UserRepository { get; }
 
         public async Task<int> SaveAsync()
         => await _dbContext.SaveChangesAsync();

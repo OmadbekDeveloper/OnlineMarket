@@ -13,20 +13,21 @@ namespace OnlineMarket
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddTransient<ICartService, CartService>();
-            builder.Services.AddTransient<ICartItemService, CartItemService>();
-            builder.Services.AddTransient<ICategoryService, CategoryService>();
-            builder.Services.AddTransient<ICustomerService, CustomerService>();
-            builder.Services.AddTransient<IDiscountService, DiscountService>();
-            builder.Services.AddTransient<IEmployeeService, EmployeeService>();
-            builder.Services.AddTransient<INotificationService, NotificationService>();
-            builder.Services.AddTransient<IOrderItemService, OrderItemService>();
-            builder.Services.AddTransient<IOrderService, OrderService>();
-            builder.Services.AddTransient<IPaymentService, PaymentService>();
-            builder.Services.AddTransient<IProductCategoryService, ProductCategoryService>();
-            builder.Services.AddTransient<IProductService, ProductService>();
-            builder.Services.AddTransient<IReviewService, ReviewService>();
-            builder.Services.AddTransient<IShippingInfoService, ShippingInfoService>();
+
+            builder.Services.AddScoped<ICartService, CartService>();
+            builder.Services.AddScoped<ICartItemService, CartItemService>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddScoped<ICustomerService, CustomerService>();
+            builder.Services.AddScoped<IDiscountService, DiscountService>();
+            builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+            builder.Services.AddScoped<INotificationService, NotificationService>();
+            builder.Services.AddScoped<IOrderItemService, OrderItemService>();
+            builder.Services.AddScoped<IOrderService, OrderService>();
+            builder.Services.AddScoped<IPaymentService, PaymentService>();
+            builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
+            builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddScoped<IReviewService, ReviewService>();
+            builder.Services.AddScoped<IShippingInfoService, ShippingInfoService>();
 
             //builder.Services.AddTransient<IMapper, Mapper>();
             //builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();

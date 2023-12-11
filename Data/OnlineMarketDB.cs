@@ -1,13 +1,11 @@
-﻿
-using OnlineMarket.Models.User;
-
-namespace OnlineMarket.Data
+﻿namespace OnlineMarket.Data
 {
     public class OnlineMarketDB : DbContext
     {
 
         public OnlineMarketDB(DbContextOptions<OnlineMarketDB> options) : base(options) { }
 
+        public DbSet<User> Users { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
@@ -24,7 +22,5 @@ namespace OnlineMarket.Data
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<ShoppingCartItem> ShoppingCartItems { get; set;}
         //public DbSet<User> Users { get; set; }
-        public DbSet<UserProfileUpdateModel> UserProfiles { get; set; }
-
     }
 }

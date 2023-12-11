@@ -30,6 +30,7 @@ global using OnlineMarket.Models.Dtos.Product;
 global using OnlineMarket.Models.Dtos.ProductCategory;
 global using OnlineMarket.Models.Dtos.Review;
 global using OnlineMarket.Models.Dtos.ShippingInfo;
+global using OnlineMarket.Models.Dtos.User;
 global using OnlineMarket.Models.Models;
 global using OnlineMarket.Models.Other;
 global using OnlineMarket.Repositories.Generic;

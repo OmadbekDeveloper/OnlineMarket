@@ -18,6 +18,8 @@ namespace OnlineMarket.Interfaces.Repasitories.Generic
         Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> expression, CancellationToken cancellationToken = default);
         Task AddAsync(T entity, CancellationToken cancellationToken = default);
         Task AddRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default);
+        Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> expression, CancellationToken cancellationToken = default);
+
 
         Task<T> CreateAsync(T entity);
         T Update(T entity);

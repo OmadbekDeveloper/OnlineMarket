@@ -1,6 +1,6 @@
 ﻿namespace OnlineMarket.Interfaces.Person
 {
-    internal interface IName
+    public interface IName
     {
         string Name { get; set; }
     }
